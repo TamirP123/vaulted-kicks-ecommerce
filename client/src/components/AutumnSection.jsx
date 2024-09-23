@@ -19,6 +19,11 @@ const SneakerCard = ({ sneaker }) => {
 
   return (
     <Card className="sneaker-card">
+      {sneaker.onSale && (
+        <Typography className="sale-label" variant="body2">
+          Sale
+        </Typography>
+      )}
       <IconButton
         className="favorite-button"
         aria-label="add to favorites"
@@ -36,16 +41,22 @@ const SneakerCard = ({ sneaker }) => {
         <Typography className="sneaker-brand" variant="body2">
           {sneaker.brand}
         </Typography>
-        <Typography className="sneaker-name" variant="subtitle1" component="div">
+        <Typography className="sneaker-name" variant="subtitle2" component="h3">
           {sneaker.name}
         </Typography>
         <Box className="price-container">
-          <Typography className="price" variant="h6">
-            ${sneaker.price.toFixed(2)}
-          </Typography>
-          {sneaker.onSale && (
-            <Typography className="sale-price" variant="body2">
-              Sale: ${sneaker.salePrice.toFixed(2)}
+          {sneaker.onSale ? (
+            <Box className="price-row">
+              <Typography className="sale-price" variant="body1">
+                ${sneaker.salePrice.toFixed(2)}
+              </Typography>
+              <Typography className="original-price" variant="body2">
+                ${sneaker.price.toFixed(2)}
+              </Typography>
+            </Box>
+          ) : (
+            <Typography className="price" variant="body1">
+              ${sneaker.price.toFixed(2)}
             </Typography>
           )}
         </Box>
