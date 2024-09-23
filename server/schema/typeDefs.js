@@ -6,11 +6,33 @@ type User {
   email: String!
 }
 
+type Sneaker {
+  _id: ID!
+  brand: String!
+  model: String!
+  name: String!
+  gender: String!
+  sizes: [SizeQuantity]!
+  price: Float!
+  description: String
+  imageUrl: String
+  category: String
+  releaseDate: String
+  recommended: Boolean
+  onSale: Boolean
+  salePrice: Float
+}
+
+type SizeQuantity {
+  size: Float!
+  quantity: Int!
+}
 
 type Query {
   users: [User]
   user(username: String!): User
   me: User
+  recommendedSneakers: [Sneaker]
 }
 
 type Auth {

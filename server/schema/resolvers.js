@@ -1,4 +1,4 @@
-const { User, Room, Booking } = require('../models');
+const { User, Sneaker } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 // Having issues with my API key via .env This is a free provided key from Stripe, typically would NOT put a secret key explicity like below.
 const stripe = require('stripe')('sk_test_51Pss2CC5VCV0wby5a0zQ6Apnw4Iy8Mx8kfkDD0iPgZ9YK99zBVg47LDqLqjvbbaSKwYVCOXMzxg5gbfXyz73bGiI00N0awVH2o');
@@ -18,6 +18,16 @@ const resolvers = {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('Not authenticated');
+    },
+    recommendedSneakers: async () => {
+      try {
+        const sneakers = await Sneaker.find({ recommended: true }).limit(8);
+        console.log('Fetched sneakers:', sneakers);  // Add this line
+        return sneakers;
+      } catch (error) {
+        console.error('Error fetching recommended sneakers:', error);
+        throw new Error('Error fetching recommended sneakers: ' + error.message);
+      }
     },
   },
 

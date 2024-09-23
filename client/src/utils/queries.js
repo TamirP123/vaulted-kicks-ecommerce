@@ -29,3 +29,18 @@ export const QUERY_USERS = gql`
   }
 `;
 
+export const QUERY_RECOMMENDED_SNEAKERS = gql`
+  query getRecommendedSneakers {
+    recommendedSneakers {
+      _id
+      brand
+      model
+      name
+      price
+      imageUrl
+      onSale
+      salePrice
+    }
+  }
+`;
+

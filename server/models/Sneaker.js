@@ -52,6 +52,18 @@ const sneakerSchema = new Schema({
   releaseDate: {
     type: Date,
   },
+  recommended: {
+    type: Boolean,
+    default: false,
+  },
+  onSale: {
+    type: Boolean,
+    default: false,
+  },
+  salePrice: {
+    type: Number,
+    min: 0,
+  },
 });
 
 const Sneaker = model('Sneaker', sneakerSchema);

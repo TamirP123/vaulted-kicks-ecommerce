@@ -27,6 +27,9 @@ const startApolloServer = async () => {
         context: authMiddleware}
     ));
 
+    // Serve up static assets
+    app.use('/images', express.static(path.join(__dirname, '../client/public/assets')));
+
     if(process.env.NODE_ENV === 'production') {
         app.use(express.static(path.join(__dirname, '../client/dist')))
         app.get('*', (req, res) => {
