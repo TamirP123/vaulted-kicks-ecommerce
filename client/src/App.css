@@ -33,7 +33,7 @@ footer {
 
 /* Optional body styling to prevent excess padding at bottom */
 body {
-  background-color: #edecea;
+  background-color: #f3f1ed;
 }
 /* Mobile-specific styles */
 @media screen and (max-width: 768px) {

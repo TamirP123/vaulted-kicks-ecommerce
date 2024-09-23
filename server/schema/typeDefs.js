@@ -21,6 +21,7 @@ type Sneaker {
   recommended: Boolean
   onSale: Boolean
   salePrice: Float
+  autumn: Boolean
 }
 
 type SizeQuantity {
@@ -33,6 +34,7 @@ type Query {
   user(username: String!): User
   me: User
   recommendedSneakers: [Sneaker]
+  autumnSneakers: [Sneaker]
 }
 
 type Auth {

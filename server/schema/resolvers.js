@@ -29,6 +29,16 @@ const resolvers = {
         throw new Error('Error fetching recommended sneakers: ' + error.message);
       }
     },
+    autumnSneakers: async () => {
+      try {
+        const sneakers = await Sneaker.find({ autumn: true }).limit(8);
+        console.log('Fetched autumn sneakers:', sneakers);
+        return sneakers;
+      } catch (error) {
+        console.error('Error fetching autumn sneakers:', error);
+        throw new Error('Error fetching autumn sneakers: ' + error.message);
+      }
+    },
   },
 
   Mutation: {

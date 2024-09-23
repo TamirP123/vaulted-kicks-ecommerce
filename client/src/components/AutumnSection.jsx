@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
-import { QUERY_RECOMMENDED_SNEAKERS } from "../utils/queries";
+import { QUERY_AUTUMN_SNEAKERS } from "../utils/queries";
 import {
   Box,
   Typography,
@@ -12,7 +12,7 @@ import {
   Container,
 } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import "../styles/RecommendedSection.css";
+import "../styles/AutumnSection.css";
 
 const SneakerCard = ({ sneaker }) => {
   const [isFavorite, setIsFavorite] = React.useState(false);
@@ -54,22 +54,29 @@ const SneakerCard = ({ sneaker }) => {
   );
 };
 
-const RecommendedSection = () => {
-  const { loading, error, data } = useQuery(QUERY_RECOMMENDED_SNEAKERS);
+const AutumnSection = () => {
+  const { loading, error, data } = useQuery(QUERY_AUTUMN_SNEAKERS);
 
   if (loading) return <Box className="loading">Loading...</Box>;
-  if (error) return <Box className="error">Error: {error.message}</Box>;
+  if (error) {
+    console.error('Error fetching autumn sneakers:', error);
+    return <Box className="error">Error: {error.message}</Box>;
+  }
 
-  const recommendedSneakers = data.recommendedSneakers;
+  const autumnSneakers = data?.autumnSneakers || [];
+
+  if (autumnSneakers.length === 0) {
+    return <Box className="no-data">No autumn sneakers available</Box>;
+  }
 
   return (
-    <Box component="section" className="recommended-section">
+    <Box component="section" className="autumn-section">
       <Container maxWidth="lg">
         <Typography variant="h5" component="h2" className="section-title">
-          Recommended For You
+          Autumn Collection
         </Typography>
-        <Grid  sx={{mt:2}} container spacing={4} className="sneaker-grid">
-          {recommendedSneakers.map((sneaker) => (
+        <Grid sx={{mt:2}} container spacing={4} className="sneaker-grid">
+          {autumnSneakers.map((sneaker) => (
             <Grid item key={sneaker._id} xs={12} sm={6} md={3}>
               <SneakerCard sneaker={sneaker} />
             </Grid>
@@ -80,4 +87,4 @@ const RecommendedSection = () => {
   );
 };
 
-export default RecommendedSection;
+export default AutumnSection;

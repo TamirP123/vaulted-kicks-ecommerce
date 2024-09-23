@@ -44,3 +44,18 @@ export const QUERY_RECOMMENDED_SNEAKERS = gql`
   }
 `;
 
+export const QUERY_AUTUMN_SNEAKERS = gql`
+  query getAutumnSneakers {
+    autumnSneakers {
+      _id
+      brand
+      model
+      name
+      price
+      imageUrl
+      onSale
+      salePrice
+    }
+  }
+`;
+

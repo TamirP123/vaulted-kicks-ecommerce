@@ -64,6 +64,10 @@ const sneakerSchema = new Schema({
     type: Number,
     min: 0,
   },
+  autumn: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Sneaker = model('Sneaker', sneakerSchema);
