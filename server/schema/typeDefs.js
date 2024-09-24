@@ -43,6 +43,7 @@ type Query {
   popularSneakers: [Sneaker]
   categories: [Category]
   latestPicks: [Sneaker]
+  allSneakers: [Sneaker]
 }
 
 type Auth {

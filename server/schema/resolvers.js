@@ -66,6 +66,15 @@ const resolvers = {
         throw new Error('Error fetching latest picks: ' + error.message);
       }
     },
+    allSneakers: async () => {
+      try {
+        const sneakers = await Sneaker.find();
+        return sneakers;
+      } catch (error) {
+        console.error('Error fetching all sneakers:', error);
+        throw new Error('Error fetching all sneakers: ' + error.message);
+      }
+    },
   },
 
   Mutation: {

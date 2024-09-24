@@ -81,5 +81,28 @@ export const QUERY_LATEST_PICKS = gql`
   }
 `;
 
+export const QUERY_ALL_SNEAKERS = gql`
+  query getAllSneakers {
+    allSneakers {
+      _id
+      brand
+      model
+      name
+      price
+      imageUrl
+      onSale
+      salePrice
+      gender
+      sizes {
+        size
+        quantity
+      }
+      description
+      category
+      releaseDate
+    }
+  }
+`;
+
 // Remove the QUERY_CATEGORIES if it's no longer needed
 

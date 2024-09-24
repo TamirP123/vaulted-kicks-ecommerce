@@ -10,7 +10,7 @@ const stripePromise = loadStripe('pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50Kh
 import App from './App.jsx';
 import Homepage from './pages/Homepage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
-
+import SneakersPage from './pages/SneakersPage.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Homepage />
+      },
+      {
+        path: 'sneakers',
+        element: <SneakersPage />
       },
       // {
       //   path: 'login',
