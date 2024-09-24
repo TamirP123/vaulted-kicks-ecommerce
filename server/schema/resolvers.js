@@ -75,6 +75,15 @@ const resolvers = {
         throw new Error('Error fetching all sneakers: ' + error.message);
       }
     },
+    sneaker: async (_, { id }) => {
+      try {
+        const sneaker = await Sneaker.findById(id);
+        return sneaker;
+      } catch (error) {
+        console.error('Error fetching single sneaker:', error);
+        throw new Error('Error fetching single sneaker: ' + error.message);
+      }
+    },
   },
 
   Mutation: {

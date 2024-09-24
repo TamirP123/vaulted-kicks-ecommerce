@@ -11,6 +11,8 @@ import App from './App.jsx';
 import Homepage from './pages/Homepage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import SneakersPage from './pages/SneakersPage.jsx';
+import SingleSneakerPage from './pages/SingleSneakerPage.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -24,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: 'sneakers',
         element: <SneakersPage />
+      },
+      {
+        path: 'sneaker/:id',
+        element: <SingleSneakerPage />
       },
       // {
       //   path: 'login',

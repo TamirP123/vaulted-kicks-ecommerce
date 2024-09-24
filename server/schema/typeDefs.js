@@ -44,6 +44,7 @@ type Query {
   categories: [Category]
   latestPicks: [Sneaker]
   allSneakers: [Sneaker]
+  sneaker(id: ID!): Sneaker
 }
 
 type Auth {

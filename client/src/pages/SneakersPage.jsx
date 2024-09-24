@@ -20,6 +20,7 @@ import {
   Collapse,
 } from "@mui/material";
 import { Favorite, FavoriteBorder, FilterList } from "@mui/icons-material";
+import { Link } from 'react-router-dom';
 import '../styles/SneakersPage.css';
 import '../styles/RecommendedSection.css';
 
@@ -28,48 +29,53 @@ const SneakerCard = ({ sneaker }) => {
 
   return (
     <Card className="sneaker-card">
-      {sneaker.onSale && (
-        <Typography className="sale-label" variant="body2">
-          Sale
-        </Typography>
-      )}
+      <Link to={`/sneaker/${sneaker._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        {sneaker.onSale && (
+          <Typography className="sale-label" variant="body2">
+            Sale
+          </Typography>
+        )}
+        <CardMedia
+          component="img"
+          image={sneaker.imageUrl}
+          alt={sneaker.name}
+          className="card-media"
+        />
+        <CardContent className="card-content">
+          <Typography className="sneaker-brand" variant="body2">
+            {sneaker.brand}
+          </Typography>
+          <Typography className="sneaker-name" variant="subtitle2" component="h3">
+            {sneaker.name}
+          </Typography>
+          <Box className="price-container">
+            {sneaker.onSale ? (
+              <Box className="price-row">
+                <Typography className="sale-price" variant="h6">
+                  ${sneaker.salePrice.toFixed(2)}
+                </Typography>
+                <Typography className="original-price" variant="body2">
+                  ${sneaker.price.toFixed(2)}
+                </Typography>
+              </Box>
+            ) : (
+              <Typography className="price" variant="h6">
+                ${sneaker.price.toFixed(2)}
+              </Typography>
+            )}
+          </Box>
+        </CardContent>
+      </Link>
       <IconButton
         className="favorite-button"
         aria-label="add to favorites"
-        onClick={() => setIsFavorite(!isFavorite)}
+        onClick={(e) => {
+          e.preventDefault();
+          setIsFavorite(!isFavorite);
+        }}
       >
         {isFavorite ? <Favorite className="favorite-icon" /> : <FavoriteBorder className="favorite-icon" />}
       </IconButton>
-      <CardMedia
-        component="img"
-        image={sneaker.imageUrl}
-        alt={sneaker.name}
-        className="card-media"
-      />
-      <CardContent className="card-content">
-        <Typography className="sneaker-brand" variant="body2">
-          {sneaker.brand}
-        </Typography>
-        <Typography className="sneaker-name" variant="subtitle2" component="h3">
-          {sneaker.name}
-        </Typography>
-        <Box className="price-container">
-          {sneaker.onSale ? (
-            <Box className="price-row">
-              <Typography className="sale-price" variant="h6">
-                ${sneaker.salePrice.toFixed(2)}
-              </Typography>
-              <Typography className="original-price" variant="body2">
-                ${sneaker.price.toFixed(2)}
-              </Typography>
-            </Box>
-          ) : (
-            <Typography className="price" variant="h6">
-              ${sneaker.price.toFixed(2)}
-            </Typography>
-          )}
-        </Box>
-      </CardContent>
     </Card>
   );
 };
@@ -248,6 +254,7 @@ const SneakersPage = () => {
             </Collapse>
           </Box>
           <Box className="sneaker-grid-container">
+
             <Grid container spacing={4} className="sneaker-grid">
               {filteredSneakers.length > 0 ? (
                 filteredSneakers.map((sneaker) => (

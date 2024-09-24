@@ -104,5 +104,25 @@ export const QUERY_ALL_SNEAKERS = gql`
   }
 `;
 
+export const QUERY_SINGLE_SNEAKER = gql`
+  query getSneaker($id: ID!) {
+    sneaker(id: $id) {
+      _id
+      brand
+      model
+      name
+      gender
+      sizes {
+        size
+        quantity
+      }
+      price
+      imageUrl
+      onSale
+      salePrice
+    }
+  }
+`;
+
 // Remove the QUERY_CATEGORIES if it's no longer needed
 

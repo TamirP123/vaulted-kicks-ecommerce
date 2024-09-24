@@ -1,0 +1,166 @@
+.single-sneaker-page-container {
+    padding-top: 120px;
+    padding-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .single-sneaker-grid {
+    display: flex;
+    gap: 60px;
+  }
+  
+  .single-sneaker-image-container {
+    flex: 1.2;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .single-sneaker-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  .single-sneaker-details-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .single-sneaker-brand {
+    color: #757575;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .single-sneaker-name {
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #333;
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+  
+  .single-sneaker-price {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #4CAF50;
+    margin-bottom: 24px;
+  }
+  
+  .single-sneaker-description {
+    margin-bottom: 24px;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .single-sneaker-details {
+    margin-bottom: 24px;
+  }
+  
+  .single-sneaker-details-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .single-sneaker-size-wrapper {
+    margin-bottom: 24px;
+  }
+  
+  .single-sneaker-size-label {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .single-sneaker-size-chart {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+  }
+  
+  .single-sneaker-size-button {
+    height: 48px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-color: #ddd;
+    text-transform: none;
+  }
+  
+  .single-sneaker-size-button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .single-sneaker-size-button.MuiButton-contained {
+    background-color: #333;
+    color: white;
+  }
+  
+  .single-sneaker-size-button-disabled {
+    opacity: 0.5;
+  }
+  
+  .single-sneaker-add-to-cart-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: #4CAF50;
+    color: white;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .single-sneaker-add-to-cart-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+  }
+  
+  .single-sneaker-breadcrumbs-wrapper {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px 12px;
+    border-radius: 4px;
+  }
+  
+  .single-sneaker-breadcrumbs {
+    font-size: 0.9rem;
+  }
+  
+  .single-sneaker-breadcrumbs a,
+  .single-sneaker-breadcrumbs .MuiBreadcrumbs-separator,
+  .single-sneaker-breadcrumbs .MuiTypography-root {
+    color: #757575;
+    text-decoration: none;
+  }
+  
+  .single-sneaker-breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 960px) {
+    .single-sneaker-grid {
+      flex-direction: column;
+    }
+  
+    .single-sneaker-image-container {
+      margin-bottom: 24px;
+    }
+  }
