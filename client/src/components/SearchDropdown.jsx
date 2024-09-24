@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { QUERY_LATEST_PICKS } from '../utils/queries';
+import { Link } from 'react-router-dom'; // Add this import
 import {
   Box,
   Typography,
@@ -55,16 +56,18 @@ const SearchDropdown = ({ onClose }) => {
         <Grid container spacing={2}>
           {(searchTerm ? filteredSneakers : latestPicks).slice(0, 8).map((sneaker) => (
             <Grid item xs={6} sm={4} md={3} key={sneaker._id}>
-              <Box className="dropdown-sneaker-item">
-                <img
-                  src={sneaker.imageUrl}
-                  alt={sneaker.name}
-                  className="dropdown-sneaker-image"
-                />
-                <Typography variant="body2" className="dropdown-sneaker-name">
-                  {sneaker.name}
-                </Typography>
-              </Box>
+              <Link to={`/sneaker/${sneaker._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Box className="dropdown-sneaker-item">
+                  <img
+                    src={sneaker.imageUrl}
+                    alt={sneaker.name}
+                    className="dropdown-sneaker-image"
+                  />
+                  <Typography variant="body2" className="dropdown-sneaker-name">
+                    {sneaker.name}
+                  </Typography>
+                </Box>
+              </Link>
             </Grid>
           ))}
         </Grid>

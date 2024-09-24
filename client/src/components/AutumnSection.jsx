@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_AUTUMN_SNEAKERS } from "../utils/queries";
+import { Link } from "react-router-dom"; // Add this import
 import {
   Box,
   Typography,
@@ -19,48 +20,53 @@ const SneakerCard = ({ sneaker }) => {
 
   return (
     <Card className="sneaker-card">
-      {sneaker.onSale && (
-        <Typography className="sale-label" variant="body2">
-          Sale
-        </Typography>
-      )}
-      <IconButton
-        className="favorite-button"
-        aria-label="add to favorites"
-        onClick={() => setIsFavorite(!isFavorite)}
-      >
-        {isFavorite ? <Favorite className="favorite-icon" /> : <FavoriteBorder className="favorite-icon" />}
-      </IconButton>
-      <CardMedia
-        component="img"
-        image={sneaker.imageUrl}
-        alt={sneaker.name}
-        className="card-media"
-      />
-      <CardContent className="card-content">
-        <Typography className="sneaker-brand" variant="body2">
-          {sneaker.brand}
-        </Typography>
-        <Typography className="sneaker-name" variant="subtitle2" component="h3">
-          {sneaker.name}
-        </Typography>
-        <Box className="price-container">
-          {sneaker.onSale ? (
-            <Box className="price-row">
-              <Typography className="sale-price" variant="body1">
-                ${sneaker.salePrice.toFixed(2)}
-              </Typography>
-              <Typography className="original-price" variant="body2">
+      <Link to={`/sneaker/${sneaker._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+        {sneaker.onSale && (
+          <Typography className="sale-label" variant="body2">
+            Sale
+          </Typography>
+        )}
+        <IconButton
+          className="favorite-button"
+          aria-label="add to favorites"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsFavorite(!isFavorite);
+          }}
+        >
+          {isFavorite ? <Favorite className="favorite-icon" /> : <FavoriteBorder className="favorite-icon" />}
+        </IconButton>
+        <CardMedia
+          component="img"
+          image={sneaker.imageUrl}
+          alt={sneaker.name}
+          className="card-media"
+        />
+        <CardContent className="card-content">
+          <Typography className="sneaker-brand" variant="body2">
+            {sneaker.brand}
+          </Typography>
+          <Typography className="sneaker-name" variant="subtitle2" component="h3">
+            {sneaker.name}
+          </Typography>
+          <Box className="price-container">
+            {sneaker.onSale ? (
+              <Box className="price-row">
+                <Typography className="sale-price" variant="body1">
+                  ${sneaker.salePrice.toFixed(2)}
+                </Typography>
+                <Typography className="original-price" variant="body2">
+                  ${sneaker.price.toFixed(2)}
+                </Typography>
+              </Box>
+            ) : (
+              <Typography className="price" variant="body1">
                 ${sneaker.price.toFixed(2)}
               </Typography>
-            </Box>
-          ) : (
-            <Typography className="price" variant="body1">
-              ${sneaker.price.toFixed(2)}
-            </Typography>
-          )}
-        </Box>
-      </CardContent>
+            )}
+          </Box>
+        </CardContent>
+      </Link>
     </Card>
   );
 };
