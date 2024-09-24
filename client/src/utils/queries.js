@@ -59,3 +59,27 @@ export const QUERY_AUTUMN_SNEAKERS = gql`
   }
 `;
 
+export const QUERY_POPULAR_SNEAKERS = gql`
+  query getPopularSneakers {
+    popularSneakers {
+      _id
+      brand
+      name
+      imageUrl
+    }
+  }
+`;
+
+export const QUERY_LATEST_PICKS = gql`
+  query getLatestPicks {
+    latestPicks {
+      _id
+      brand
+      name
+      imageUrl
+    }
+  }
+`;
+
+// Remove the QUERY_CATEGORIES if it's no longer needed
+

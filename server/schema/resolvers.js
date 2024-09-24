@@ -39,6 +39,33 @@ const resolvers = {
         throw new Error('Error fetching autumn sneakers: ' + error.message);
       }
     },
+    popularSneakers: async () => {
+      try {
+        const sneakers = await Sneaker.aggregate([{ $sample: { size: 8 } }]);
+        return sneakers;
+      } catch (error) {
+        console.error('Error fetching popular sneakers:', error);
+        throw new Error('Error fetching popular sneakers: ' + error.message);
+      }
+    },
+    categories: async () => {
+      try {
+        const categories = await Category.find();
+        return categories;
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        throw new Error('Error fetching categories: ' + error.message);
+      }
+    },
+    latestPicks: async () => {
+      try {
+        const sneakers = await Sneaker.find().sort({ releaseDate: -1 }).limit(10);
+        return sneakers;
+      } catch (error) {
+        console.error('Error fetching latest picks:', error);
+        throw new Error('Error fetching latest picks: ' + error.message);
+      }
+    },
   },
 
   Mutation: {

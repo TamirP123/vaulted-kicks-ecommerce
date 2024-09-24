@@ -29,12 +29,20 @@ type SizeQuantity {
   quantity: Int!
 }
 
+type Category {
+  _id: ID!
+  name: String!
+}
+
 type Query {
   users: [User]
   user(username: String!): User
   me: User
   recommendedSneakers: [Sneaker]
   autumnSneakers: [Sneaker]
+  popularSneakers: [Sneaker]
+  categories: [Category]
+  latestPicks: [Sneaker]
 }
 
 type Auth {

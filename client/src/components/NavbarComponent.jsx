@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
 import '../styles/Navbar.css';
+import SearchDropdown from './SearchDropdown';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -48,6 +49,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const NavbarComponent = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,32 +65,50 @@ const NavbarComponent = () => {
     };
   }, [scrolled]);
 
+  const handleSearchClick = () => {
+    console.log("Search clicked"); // Add this line
+    setIsSearchActive(true);
+  };
+
+  const handleSearchClose = () => {
+    console.log("Search closed"); // Add this line
+    setIsSearchActive(false);
+  };
+
+  console.log("isSearchActive:", isSearchActive); // Add this line
+
   return (
     <AppBar position="fixed" className={`navbar ${scrolled ? 'scrolled' : ''}`} elevation={0}>
       <Toolbar className="toolbar">
-        <Box className="navbar-section">
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </Box>
+        {!isSearchActive ? (
+          <>
+            <Box className="navbar-section">
+              <Search onClick={handleSearchClick}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search>
+            </Box>
 
-        <Typography variant="h4" className="navbar-title navbar-section">
-          Vaulted Kicks
-        </Typography>
+            <Typography variant="h4" className="navbar-title navbar-section">
+              Vaulted Kicks
+            </Typography>
 
-        <Box className="navbar-links navbar-section">
-          <a href="#" className="nav-link">Men</a>
-          <a href="#" className="nav-link">Women</a>
-          <a href="#" className="nav-link">Kids</a>
-          <a href="#" className="nav-link">Sale</a>
-          <a href="#" className="nav-link">Launches</a>
-        </Box>
+            <Box className="navbar-links navbar-section">
+              <a href="#" className="nav-link">Men</a>
+              <a href="#" className="nav-link">Women</a>
+              <a href="#" className="nav-link">Kids</a>
+              <a href="#" className="nav-link">Sale</a>
+              <a href="#" className="nav-link">Login</a>
+            </Box>
+          </>
+        ) : (
+          <SearchDropdown onClose={handleSearchClose} />
+        )}
       </Toolbar>
     </AppBar>
   );
