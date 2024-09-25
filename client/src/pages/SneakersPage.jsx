@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ALL_SNEAKERS, QUERY_USER_FAVORITES } from "../utils/queries";
+import { useLocation } from 'react-router-dom';
 import Auth from "../utils/auth";
 import {
   Box,
@@ -22,6 +23,11 @@ import "../styles/SneakersPage.css";
 import "../styles/RecommendedSection.css";
 
 const SneakersPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const saleFilter = queryParams.get('sale') === 'true';
+  const searchQuery = queryParams.get('search') || '';
+
   const isLoggedIn = Auth.loggedIn();
   const { loading, error, data } = useQuery(QUERY_ALL_SNEAKERS, {
     onError: (error) => {
@@ -38,6 +44,8 @@ const SneakersPage = () => {
     usMenSizes: [],
     usWomenSizes: [],
     priceRange: [0, 1000],
+    onSale: saleFilter,
+    search: searchQuery,
   });
   const [showFilters, setShowFilters] = useState(true);
 
@@ -46,6 +54,15 @@ const SneakersPage = () => {
       setFilteredSneakers(data.allSneakers);
     }
   }, [data]);
+
+  useEffect(() => {
+    // Reset filters when the location changes
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      onSale: queryParams.get('sale') === 'true',
+      search: queryParams.get('search') || '',
+    }));
+  }, [location.search]);
 
   const handleFilterChange = (filterType, value) => {
     setFilters((prevFilters) => ({
@@ -57,7 +74,14 @@ const SneakersPage = () => {
   const applyFilters = () => {
     if (data && data.allSneakers) {
       const filtered = data.allSneakers.filter((sneaker) => {
+        const matchesSearch = filters.search
+          ? sneaker.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+            sneaker.brand.toLowerCase().includes(filters.search.toLowerCase()) ||
+            sneaker.model.toLowerCase().includes(filters.search.toLowerCase())
+          : true;
+
         return (
+          matchesSearch &&
           (filters.brands.length === 0 ||
             filters.brands.includes(sneaker.brand)) &&
           (filters.models.length === 0 ||
@@ -71,12 +95,17 @@ const SneakersPage = () => {
           (filters.usWomenSizes.length === 0 ||
             sneaker.sizes.some((size) =>
               filters.usWomenSizes.includes(size.size - 1.5)
-            ))
+            )) &&
+          (!filters.onSale || sneaker.onSale)
         );
       });
       setFilteredSneakers(filtered);
     }
   };
+
+  useEffect(() => {
+    applyFilters();
+  }, [data, filters]);
 
   if (loading || (isLoggedIn && loadingFavorites)) return <CircularProgress />;
   if (error) {
@@ -109,12 +138,15 @@ const SneakersPage = () => {
             className="page-title"
             gutterBottom
           >
-            Shop For Sneakers
+            {searchQuery 
+              ? `Search Results for "${searchQuery}"`
+              : "Shop For Sneakers"}
           </Typography>
         </Container>
         <Typography variant="subtitle1" className="welcome-message">
-          Welcome to our exclusive collection. Find your perfect pair with ease
-          using our smart filters.
+          {searchQuery
+            ? `Showing results for "${searchQuery}". Use our smart filters to refine your search.`
+            : "Welcome to our exclusive collection. Find your perfect pair with ease using our smart filters."}
         </Typography>
       </Box>
       <Container maxWidth="xl">
@@ -254,6 +286,28 @@ const SneakersPage = () => {
                     ${filters.priceRange[0]} - ${filters.priceRange[1]}
                   </Typography>
                 </Box>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={filters.onSale}
+                        onChange={(e) => handleFilterChange("onSale", e.target.checked)}
+                      />
+                    }
+                    label="On Sale"
+                  />
+                </FormGroup>
+                <Divider />
+                <FormGroup>
+                  <Typography variant="subtitle1">Search</Typography>
+                  <input
+                    type="text"
+                    value={filters.search}
+                    onChange={(e) => handleFilterChange("search", e.target.value)}
+                    placeholder="Search sneakers..."
+                  />
+                </FormGroup>
+                <Divider />
                 <Button
                   variant="contained"
                   color="primary"

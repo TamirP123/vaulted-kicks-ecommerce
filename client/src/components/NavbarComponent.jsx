@@ -4,7 +4,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import "../styles/Navbar.css";
 import SearchDropdown from "./SearchDropdown";
@@ -58,6 +58,8 @@ const NavbarComponent = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,6 +81,7 @@ const NavbarComponent = () => {
 
   const handleSearchClose = () => {
     setIsSearchActive(false);
+    setSearchQuery(""); // Reset search query when closing
   };
 
   const handleAccountClick = (event) => {
@@ -92,6 +95,20 @@ const NavbarComponent = () => {
   const handleLogout = () => {
     Auth.logout();
     handleAccountClose();
+  };
+
+  const handleSaleClick = (e) => {
+    e.preventDefault();
+    navigate('/sneakers?sale=true');
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/sneakers?search=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchActive(false);
+      setSearchQuery("");
+    }
   };
 
   return (
@@ -111,6 +128,8 @@ const NavbarComponent = () => {
                 <StyledInputBase
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </Search>
             </Box>
@@ -127,7 +146,7 @@ const NavbarComponent = () => {
                   Sneakers
                 </a>
               </Link>
-              <a href="#" className="nav-link">
+              <a href="#" className="nav-link" style={{ textDecoration: 'none', color: 'black' }} onClick={handleSaleClick}>
                 Sale
               </a>
               {Auth.loggedIn() ? (
@@ -164,7 +183,12 @@ const NavbarComponent = () => {
             </Box>
           </>
         ) : (
-          <SearchDropdown onClose={handleSearchClose} />
+          <SearchDropdown 
+            onClose={handleSearchClose} 
+            onSubmit={handleSearchSubmit}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
         )}
       </Toolbar>
     </AppBar>
