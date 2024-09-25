@@ -18,6 +18,7 @@ import SingleSneakerPage from "./pages/SingleSneakerPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import FavoritesPage from "./pages/FavoritesPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "checkout-confirmation",
         element: <CheckoutConfirmation />,
+      },
+      {
+        path: "favorites",
+        element: <FavoritesPage />,
       },
     ],
   },

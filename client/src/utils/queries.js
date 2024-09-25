@@ -1,4 +1,4 @@
-import { gql }  from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const QUERY_USER = gql`
   query user($username: String!) {
@@ -21,11 +21,11 @@ export const QUERY_ME = gql`
 `;
 
 export const QUERY_USERS = gql`
-  query getUsers{
+  query getUsers {
     users {
-        username
-        email
-      }
+      username
+      email
+    }
   }
 `;
 
@@ -178,5 +178,24 @@ export const QUERY_USER_ORDERS = gql`
   }
 `;
 
-// Remove the QUERY_CATEGORIES if it's no longer needed
+// Add this query
+export const QUERY_USER_FAVORITES = gql`
+  query getUserFavorites {
+    me {
+      _id
+      username
+      favorites {
+        _id
+        brand
+        model
+        name
+        imageUrl
+        price
+        onSale
+        salePrice
+      }
+    }
+  }
+`;
 
+// Remove the QUERY_CATEGORIES if it's no longer needed

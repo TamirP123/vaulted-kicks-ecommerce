@@ -5,6 +5,7 @@ type User {
   username: String!
   email: String!
   orders: [Order]
+  favorites: [Sneaker]
 }
 
 type Order {
@@ -93,6 +94,7 @@ type Query {
   sneaker(id: ID!): Sneaker
   orders: [Order]
   userOrders: [Order]
+  sneakerCount: Int
 }
 
 type Auth {
@@ -109,6 +111,8 @@ type Mutation {
   login(email: String!, password: String!): Auth
   createPaymentIntent(amount: Int!): PaymentIntentResponse!
   addOrder(input: OrderInput!): Order
+  addToFavorites(sneakerId: ID!): User
+  removeFromFavorites(sneakerId: ID!): User
 }
 `;
 

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const sneakerSchema = new Schema({
   brand: {
@@ -18,20 +18,22 @@ const sneakerSchema = new Schema({
   },
   gender: {
     type: String,
-    enum: ['Men', 'Women', 'Unisex'],
+    enum: ["Men", "Women", "Unisex"],
     required: true,
   },
-  sizes: [{
-    size: {
-      type: Number,
-      required: true,
+  sizes: [
+    {
+      size: {
+        type: Number,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
     },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  }],
+  ],
   price: {
     type: Number,
     required: true,
@@ -70,6 +72,6 @@ const sneakerSchema = new Schema({
   },
 });
 
-const Sneaker = model('Sneaker', sneakerSchema);
+const Sneaker = model("Sneaker", sneakerSchema);
 
 module.exports = Sneaker;

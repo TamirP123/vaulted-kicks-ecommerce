@@ -11,6 +11,11 @@ const path = require('path');
 const { typeDefs, resolvers } = require('./schema');
 const db = require('./config/connection');
 const { authMiddleware } = require('./utils/auth');
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/your_database_name')
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // console.log('Stripe Secret Key', process.env.secret); 
 

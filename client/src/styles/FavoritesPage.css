@@ -1,0 +1,47 @@
+.favorites-page {
+  padding: 100px 0 40px;
+  min-height: calc(100vh - 64px);
+  background-color: #f8f8f8;
+}
+
+.page-title {
+  margin-bottom: 40px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.no-favorites {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.favorites-grid {
+  margin-top: 20px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+@media (max-width: 600px) {
+  .favorites-page {
+    padding: 60px 0 20px;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+}

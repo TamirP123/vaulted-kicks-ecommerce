@@ -68,4 +68,28 @@ export const ADD_ORDER = gql`
   }
 `;
 
+export const ADD_TO_FAVORITES = gql`
+  mutation addToFavorites($sneakerId: ID!) {
+    addToFavorites(sneakerId: $sneakerId) {
+      _id
+      username
+      favorites {
+        _id
+      }
+    }
+  }
+`;
+
+export const REMOVE_FROM_FAVORITES = gql`
+  mutation removeFromFavorites($sneakerId: ID!) {
+    removeFromFavorites(sneakerId: $sneakerId) {
+      _id
+      username
+      favorites {
+        _id
+      }
+    }
+  }
+`;
+
 

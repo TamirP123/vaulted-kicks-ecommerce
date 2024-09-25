@@ -148,7 +148,7 @@ const NavbarComponent = () => {
                     <MenuItem onClick={handleAccountClose} component={Link} to="/orders">
                       My Orders
                     </MenuItem>
-                    <MenuItem onClick={handleAccountClose} component={Link} to="/my-orders">
+                    <MenuItem onClick={handleAccountClose} component={Link} to="/favorites">
                       My Favorites
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
