@@ -13,6 +13,9 @@ import ErrorPage from './pages/ErrorPage.jsx';
 import SneakersPage from './pages/SneakersPage.jsx';
 import SingleSneakerPage from './pages/SingleSneakerPage.jsx';
 import CheckoutPage from './pages/CheckoutPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import SignupPage from './pages/SignupPage.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -35,14 +38,14 @@ const router = createBrowserRouter([
         path: 'checkout',
         element: <CheckoutPage />
       },
-      // {
-      //   path: 'login',
-      //   element: <LoginPage />
-      // },
-      // {
-      //   path: 'signup',
-      //   element: <SignupPage />
-      // },
+      {
+        path: 'login',
+        element: <LoginPage />
+      },
+      {
+        path: 'signup',
+        element: <SignupPage />
+      },
     ]
   }
 ]);

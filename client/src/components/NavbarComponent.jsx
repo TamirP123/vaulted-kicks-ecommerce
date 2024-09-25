@@ -3,12 +3,18 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import "../styles/Navbar.css";
 import SearchDropdown from "./SearchDropdown";
+import Auth from "../utils/auth";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+
+// Import React Icons
+import { FaSearch, FaUserCircle } from 'react-icons/fa';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -51,6 +57,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const NavbarComponent = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,16 +74,25 @@ const NavbarComponent = () => {
   }, [scrolled]);
 
   const handleSearchClick = () => {
-    console.log("Search clicked"); // Add this line
     setIsSearchActive(true);
   };
 
   const handleSearchClose = () => {
-    console.log("Search closed"); // Add this line
     setIsSearchActive(false);
   };
 
-  console.log("isSearchActive:", isSearchActive); // Add this line
+  const handleAccountClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleAccountClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    Auth.logout();
+    handleAccountClose();
+  };
 
   return (
     <AppBar
@@ -90,7 +106,7 @@ const NavbarComponent = () => {
             <Box className="navbar-section">
               <Search onClick={handleSearchClick}>
                 <SearchIconWrapper>
-                  <SearchIcon />
+                  <FaSearch />
                 </SearchIconWrapper>
                 <StyledInputBase
                   placeholder="Search…"
@@ -112,17 +128,36 @@ const NavbarComponent = () => {
                 </a>
               </Link>
               <a href="#" className="nav-link">
-                Men
-              </a>
-              <a href="#" className="nav-link">
-                Women
-              </a>
-              <a href="#" className="nav-link">
                 Sale
               </a>
-              <a href="#" className="nav-link">
-                Login
-              </a>
+              {Auth.loggedIn() ? (
+                <>
+                  <Button
+                    className="nav-link account-button"
+                    onClick={handleAccountClick}
+                    startIcon={<FaUserCircle />}
+                  >
+                    Account
+                  </Button>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleAccountClose}
+                    className="account-menu"
+                  >
+                    <MenuItem onClick={handleAccountClose} component={Link} to="/my-orders">
+                      My Orders
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <Link to="/login" style={{ textDecoration: 'none', color: 'black' }}>
+                  <a href="#" className="nav-link">
+                    Login
+                  </a>
+                </Link>
+              )}
             </Box>
           </>
         ) : (

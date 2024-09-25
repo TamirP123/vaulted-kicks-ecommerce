@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { CREATE_PAYMENT_INTENT } from '../utils/mutations';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { CREATE_PAYMENT_INTENT } from "../utils/mutations";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import {
   Box,
   Typography,
@@ -16,10 +21,12 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-} from '@mui/material';
-import '../styles/CheckoutPage.css';
+} from "@mui/material";
+import "../styles/CheckoutPage.css";
 
-const stripePromise = loadStripe('pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH');
+const stripePromise = loadStripe(
+  "pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH"
+);
 
 const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
   const stripe = useStripe();
@@ -39,7 +46,9 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
     }
 
     try {
-      const { data } = await createPaymentIntent({ variables: { amount: Math.round(total * 100) } });
+      const { data } = await createPaymentIntent({
+        variables: { amount: Math.round(total * 100) },
+      });
       const clientSecret = data.createPaymentIntent.clientSecret;
 
       const result = await stripe.confirmCardPayment(clientSecret, {
@@ -64,7 +73,7 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
         setSucceeded(true);
       }
     } catch (err) {
-      setError('An error occurred while processing your payment.');
+      setError("An error occurred while processing your payment.");
     }
 
     setProcessing(false);
@@ -75,21 +84,27 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
       <Typography variant="h6" gutterBottom>
         Payment Details
       </Typography>
-      <CardElement options={{
-        style: {
-          base: {
-            fontSize: '16px',
-            color: '#424770',
-            '::placeholder': {
-              color: '#aab7c4',
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: "16px",
+              color: "#424770",
+              "::placeholder": {
+                color: "#aab7c4",
+              },
+            },
+            invalid: {
+              color: "#9e2146",
             },
           },
-          invalid: {
-            color: '#9e2146',
-          },
-        },
-      }}/>
-      {error && <div className="card-error" role="alert">{error}</div>}
+        }}
+      />
+      {error && (
+        <div className="card-error" role="alert">
+          {error}
+        </div>
+      )}
       <Button
         type="submit"
         variant="contained"
@@ -98,7 +113,11 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
         disabled={!stripe || processing || succeeded || !isFormValid}
         className="pay-button"
       >
-        {processing ? <CircularProgress size={24} /> : `Pay $${total.toFixed(2)}`}
+        {processing ? (
+          <CircularProgress size={24} />
+        ) : (
+          `Pay $${total.toFixed(2)}`
+        )}
       </Button>
       {succeeded && (
         <div className="payment-success">
@@ -112,27 +131,33 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
 const CheckoutPage = () => {
   const location = useLocation();
   const { sneaker, selectedSize } = location.state || {};
-  const [shippingOption, setShippingOption] = useState('lowest');
+  const [shippingOption, setShippingOption] = useState("lowest");
   const [shippingInfo, setShippingInfo] = useState({
-    fullName: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
+    fullName: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    const isValid = Object.values(shippingInfo).every(value => value.trim() !== '');
+    const isValid = Object.values(shippingInfo).every(
+      (value) => value.trim() !== ""
+    );
     setIsFormValid(isValid);
   }, [shippingInfo]);
 
   if (!sneaker) {
-    return <Typography>No sneaker selected. Please go back and select a sneaker.</Typography>;
+    return (
+      <Typography>
+        No sneaker selected. Please go back and select a sneaker.
+      </Typography>
+    );
   }
 
   const subtotal = sneaker.salePrice || sneaker.price;
-  const shipping = shippingOption === 'lowest' ? 5.99 : 14.99;
+  const shipping = shippingOption === "lowest" ? 5.99 : 14.99;
   const tax = subtotal * 0.08; // Assuming 8% tax rate
   const total = subtotal + shipping + tax;
 
@@ -148,37 +173,55 @@ const CheckoutPage = () => {
       <Grid container spacing={4}>
         <Grid item xs={12} md={7}>
           <Paper elevation={3} className="order-summary">
-            <Typography variant="h5" gutterBottom>Order Summary</Typography>
+            <Typography variant="h5" gutterBottom>
+              Order Summary
+            </Typography>
             <Divider />
             <Box className="sneaker-summary">
-              <img src={sneaker.imageUrl} alt={sneaker.name} className="sneaker-image" />
+              <img
+                src={sneaker.imageUrl}
+                alt={sneaker.name}
+                className="sneaker-image"
+              />
               <Box>
                 <Typography variant="h6">{sneaker.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   US {sneaker.gender} Size {selectedSize}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">{sneaker.brand}</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {sneaker.brand}
+                </Typography>
               </Box>
             </Box>
-            <Typography variant="h6" gutterBottom>Shipping Options</Typography>
+            <Typography variant="h6" gutterBottom>
+              Shipping Options
+            </Typography>
             <Box className="shipping-options">
-              <Paper 
-                elevation={2} 
-                className={`shipping-option ${shippingOption === 'lowest' ? 'selected' : ''}`}
-                onClick={() => setShippingOption('lowest')}
+              <Paper
+                elevation={2}
+                className={`shipping-option ${
+                  shippingOption === "lowest" ? "selected" : ""
+                }`}
+                onClick={() => setShippingOption("lowest")}
               >
                 <Typography variant="subtitle1">Standard Shipping</Typography>
                 <Typography variant="h6">$5.99</Typography>
-                <Typography variant="body2" color="textSecondary">Delivery in 5-7 business days</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Delivery in 5-7 business days
+                </Typography>
               </Paper>
-              <Paper 
-                elevation={2} 
-                className={`shipping-option fastest ${shippingOption === 'fastest' ? 'selected' : ''}`}
-                onClick={() => setShippingOption('fastest')}
+              <Paper
+                elevation={2}
+                className={`shipping-option fastest ${
+                  shippingOption === "fastest" ? "selected" : ""
+                }`}
+                onClick={() => setShippingOption("fastest")}
               >
                 <Typography variant="subtitle1">Express Shipping</Typography>
                 <Typography variant="h6">$14.99</Typography>
-                <Typography variant="body2" color="textSecondary">Delivery in 1-3 business days</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Delivery in 1-3 business days
+                </Typography>
               </Paper>
             </Box>
             <Box className="cost-summary">
@@ -188,7 +231,9 @@ const CheckoutPage = () => {
               </Box>
               <Box className="cost-item">
                 <Typography color="textSecondary">Shipping</Typography>
-                <Typography color="textSecondary">${shipping.toFixed(2)}</Typography>
+                <Typography color="textSecondary">
+                  ${shipping.toFixed(2)}
+                </Typography>
               </Box>
               <Box className="cost-item">
                 <Typography color="textSecondary">Estimated Tax</Typography>
@@ -204,7 +249,9 @@ const CheckoutPage = () => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Paper elevation={3} className="payment-form">
-            <Typography variant="h6" gutterBottom>Shipping Information</Typography>
+            <Typography variant="h6" gutterBottom>
+              Shipping Information
+            </Typography>
             <TextField
               required
               fullWidth
@@ -263,7 +310,11 @@ const CheckoutPage = () => {
             />
             <Divider className="form-divider" />
             <Elements stripe={stripePromise}>
-              <PaymentForm total={total} shippingInfo={shippingInfo} isFormValid={isFormValid} />
+              <PaymentForm
+                total={total}
+                shippingInfo={shippingInfo}
+                isFormValid={isFormValid}
+              />
             </Elements>
           </Paper>
         </Grid>
