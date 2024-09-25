@@ -2,9 +2,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
   background-color: #f7f7f7;
   padding: 20px;
+  padding-top: 64px; /* Add this line to account for the navbar */
 }
 
 .auth-container {

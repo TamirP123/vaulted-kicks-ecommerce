@@ -1,4 +1,4 @@
-const { User, Sneaker } = require('../models');
+const { User, Sneaker, Order } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 // Having issues with my API key via .env This is a free provided key from Stripe, typically would NOT put a secret key explicity like below.
 const stripe = require('stripe')('sk_test_51Pss2CC5VCV0wby5a0zQ6Apnw4Iy8Mx8kfkDD0iPgZ9YK99zBVg47LDqLqjvbbaSKwYVCOXMzxg5gbfXyz73bGiI00N0awVH2o');
@@ -84,6 +84,33 @@ const resolvers = {
         throw new Error('Error fetching single sneaker: ' + error.message);
       }
     },
+    orders: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id).populate('orders');
+        return user.orders;
+      }
+      throw new AuthenticationError('Not logged in');
+    },
+    userOrders: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id).populate({
+          path: 'orders',
+          populate: {
+            path: 'items.sneaker',
+            model: 'Sneaker'
+          }
+        });
+        
+        // Ensure orderDate is a valid string
+        const orders = user.orders.map(order => ({
+          ...order.toObject(),
+          orderDate: order.orderDate.toISOString()
+        }));
+        
+        return orders;
+      }
+      throw new AuthenticationError('Not logged in');
+    },
   },
 
   Mutation: {
@@ -121,6 +148,47 @@ const resolvers = {
       } catch (error) {
         throw new Error(error.message);
       }
+    },
+    addOrder: async (parent, { input }, context) => {
+      if (context.user) {
+        try {
+          // Map the input items to replace sneakerId with the actual sneaker object
+          const items = await Promise.all(input.items.map(async (item) => {
+            const sneaker = await Sneaker.findById(item.sneakerId);
+            if (!sneaker) {
+              throw new Error(`Sneaker with id ${item.sneakerId} not found`);
+            }
+            return {
+              ...item,
+              sneaker: sneaker._id // Use the sneaker's _id
+            };
+          }));
+
+          const order = new Order({
+            ...input,
+            items,
+            user: context.user._id
+          });
+
+          const savedOrder = await order.save();
+
+          // Populate the sneaker data in the saved order
+          const populatedOrder = await Order.findById(savedOrder._id).populate('items.sneaker');
+
+          await User.findByIdAndUpdate(
+            context.user._id,
+            { $push: { orders: savedOrder._id } },
+            { new: true }
+          );
+
+          return populatedOrder;
+        } catch (error) {
+          console.error('Error adding order:', error);
+          throw new Error(error.message);
+        }
+      }
+
+      throw new AuthenticationError('Not logged in');
     },
   },
 };

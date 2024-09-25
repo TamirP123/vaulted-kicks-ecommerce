@@ -9,22 +9,29 @@
   text-align: center;
   margin-bottom: 40px;
   color: #333;
+  font-weight: 600;
 }
 
-.order-summary, .payment-form {
+.checkout-stepper {
+  margin-bottom: 40px;
+}
+
+.checkout-paper {
   padding: 32px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.summary-divider {
+  margin: 24px 0;
 }
 
 .sneaker-summary {
   display: flex;
   align-items: center;
   margin: 20px 0;
-  padding: 16px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
 }
 
 .sneaker-image {
@@ -33,6 +40,15 @@
   object-fit: cover;
   margin-right: 20px;
   border-radius: 4px;
+}
+
+.sneaker-details {
+  flex-grow: 1;
+}
+
+.sneaker-price {
+  color: #4CAF50;
+  margin-top: 8px;
 }
 
 .shipping-options {
@@ -48,6 +64,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  border-radius: 8px;
 }
 
 .shipping-option:hover {
@@ -101,10 +118,6 @@
   border-color: #dc3545;
 }
 
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-
 .card-error {
   color: #dc3545;
   font-size: 14px;
@@ -127,12 +140,20 @@
   margin-top: 16px;
 }
 
-.billing-checkbox {
-  margin-top: 16px;
+.guest-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.form-divider {
-  margin: 24px 0;
+.signup-button {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.guest-button {
+  border-color: #4CAF50 !important;
+  color: #4CAF50 !important;
 }
 
 @media (max-width: 960px) {
@@ -140,7 +161,7 @@
     padding-top: 80px;
   }
   
-  .order-summary, .payment-form {
+  .checkout-paper {
     padding: 24px;
   }
 

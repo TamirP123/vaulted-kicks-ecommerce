@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/BannerSection.css';
 import bannerVideo from '../../public/assets/banner.mp4';
+import { Link } from 'react-router-dom';
 
 const BannerSection = () => {
   return (
@@ -13,7 +14,9 @@ const BannerSection = () => {
         <div className="banner-overlay">
           <h2 className="banner-text">Sneaker Sale</h2>
           <p className="banner-subtext">Up to 35% Off</p>
+          <Link to="/sneakers" style={{ textDecoration: 'none', color: 'black' }}>
           <button className="banner-cta">Shop Now</button>
+          </Link>
         </div>
       </div>
     </section>

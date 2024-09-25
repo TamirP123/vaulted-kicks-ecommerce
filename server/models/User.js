@@ -1,22 +1,30 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const userSchema =  new Schema({
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
     trim: true,
+    unique: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/.+@.+\..+/, 'Must match an email address!']
   },
   password: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 5
   },
-  email: {
-    type: String, 
-    required: true,
-    trim: true
-  },
+  orders: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Order'
+  }]
 });
 
 userSchema.pre('save', async function(next) {
@@ -29,9 +37,9 @@ userSchema.pre('save', async function(next) {
 });
 
 userSchema.methods.isCorrectPassword = async function(password) {
-  return await bcrypt.compare(password, this.password);
+  return bcrypt.compare(password, this.password);
 };
 
-const User = model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

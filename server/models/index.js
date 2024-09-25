@@ -1,5 +1,5 @@
 const User = require('./User');
 const Sneaker = require('./Sneaker');
-const Category = require('./Category');
+const Order = require('./Order');
 
-module.exports = { User, Sneaker, Category }
+module.exports = { User, Sneaker, Order };

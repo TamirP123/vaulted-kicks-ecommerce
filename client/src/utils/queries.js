@@ -124,5 +124,59 @@ export const QUERY_SINGLE_SNEAKER = gql`
   }
 `;
 
+export const GET_USER_ORDERS = gql`
+  query GetUserOrders {
+    orders {
+      _id
+      orderDate
+      items {
+        sneaker {
+          name
+        }
+        size
+        quantity
+        price
+      }
+      total
+      shippingAddress {
+        fullName
+        address
+        city
+        state
+        zipCode
+      }
+      status
+    }
+  }
+`;
+
+export const QUERY_USER_ORDERS = gql`
+  query getUserOrders {
+    userOrders {
+      _id
+      orderDate
+      total
+      status
+      items {
+        sneaker {
+          _id
+          name
+          imageUrl
+        }
+        size
+        quantity
+        price
+      }
+      shippingAddress {
+        fullName
+        address
+        city
+        state
+        zipCode
+      }
+    }
+  }
+`;
+
 // Remove the QUERY_CATEGORIES if it's no longer needed
 

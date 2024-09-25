@@ -38,11 +38,17 @@ function LoginPage() {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-image">
-          <img src="/assets/loginCutout.png" alt="Sneaker" className="logsneaker-image" />
+          <img
+            src="/assets/loginCutout.png"
+            alt="Sneaker"
+            className="logsneaker-image"
+          />
         </div>
         <div className="auth-form-container">
           <h2>Welcome Back</h2>
-          <p className="auth-subtitle">Please enter your credentials to log in.</p>
+          <p className="auth-subtitle">
+            Please enter your credentials to log in.
+          </p>
           <form onSubmit={handleFormSubmit}>
             <div className="form-group">
               <input

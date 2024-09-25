@@ -3,6 +3,7 @@ import '../styles/Hero.css';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
 import heroSneaker from '../../public/assets/heroSneaker.png';
 
 const Hero = () => {
@@ -19,9 +20,11 @@ const Hero = () => {
           <Typography variant="body1" className="hero-description">
             Discover the exclusive collaboration today. Limited edition, premium quality.
           </Typography>
+          <Link to="/sneakers" style={{ textDecoration: 'none', color: 'black' }}>
           <Button variant="contained" className="hero-button">
             Shop Now
           </Button>
+          </Link>
         </Box>
         
         <Box className="hero-image-container">

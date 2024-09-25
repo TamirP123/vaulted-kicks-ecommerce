@@ -4,6 +4,52 @@ type User {
   _id: ID!
   username: String!
   email: String!
+  orders: [Order]
+}
+
+type Order {
+  _id: ID!
+  orderDate: String!
+  items: [OrderItem]!
+  total: Float!
+  shippingAddress: ShippingAddress!
+  status: String!
+}
+
+type OrderItem {
+  sneaker: Sneaker!
+  size: Float!
+  quantity: Int!
+  price: Float!
+}
+
+type ShippingAddress {
+  fullName: String!
+  address: String!
+  city: String!
+  state: String!
+  zipCode: String!
+}
+
+input OrderInput {
+  items: [OrderItemInput]!
+  total: Float!
+  shippingAddress: ShippingAddressInput!
+}
+
+input OrderItemInput {
+  sneakerId: ID!
+  size: Float!
+  quantity: Int!
+  price: Float!
+}
+
+input ShippingAddressInput {
+  fullName: String!
+  address: String!
+  city: String!
+  state: String!
+  zipCode: String!
 }
 
 type Sneaker {
@@ -45,6 +91,8 @@ type Query {
   latestPicks: [Sneaker]
   allSneakers: [Sneaker]
   sneaker(id: ID!): Sneaker
+  orders: [Order]
+  userOrders: [Order]
 }
 
 type Auth {
@@ -60,6 +108,7 @@ type Mutation {
   addUser(username: String!, email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth
   createPaymentIntent(amount: Int!): PaymentIntentResponse!
+  addOrder(input: OrderInput!): Order
 }
 `;
 

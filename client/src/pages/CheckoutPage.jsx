@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { CREATE_PAYMENT_INTENT } from "../utils/mutations";
+import { CREATE_PAYMENT_INTENT, ADD_ORDER } from "../utils/mutations";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -9,6 +9,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import Auth from "../utils/auth";
 import {
   Box,
   Typography,
@@ -21,6 +22,9 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
+  Stepper,
+  Step,
+  StepLabel,
 } from "@mui/material";
 import "../styles/CheckoutPage.css";
 
@@ -28,7 +32,7 @@ const stripePromise = loadStripe(
   "pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH"
 );
 
-const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
+const PaymentForm = ({ total, shippingInfo, isFormValid, sneaker, selectedSize, handleOrderCreation }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -68,15 +72,17 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
 
       if (result.error) {
         setError(`Payment failed: ${result.error.message}`);
+        setProcessing(false);
       } else {
         setError(null);
         setSucceeded(true);
+        // Call handleOrderCreation after successful payment
+        await handleOrderCreation();
       }
     } catch (err) {
       setError("An error occurred while processing your payment.");
+      setProcessing(false);
     }
-
-    setProcessing(false);
   };
 
   return (
@@ -130,23 +136,84 @@ const PaymentForm = ({ total, shippingInfo, isFormValid }) => {
 
 const CheckoutPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { sneaker, selectedSize } = location.state || {};
   const [shippingOption, setShippingOption] = useState("lowest");
   const [shippingInfo, setShippingInfo] = useState({
     fullName: "",
+    email: "",
     address: "",
     city: "",
     state: "",
     zipCode: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isGuest, setIsGuest] = useState(!Auth.loggedIn());
+
+  const [addOrder] = useMutation(ADD_ORDER);
+
+  const handleOrderCreation = async () => {
+    if (Auth.loggedIn()) {
+      try {
+        const { data } = await addOrder({
+          variables: {
+            input: {
+              items: [{
+                sneakerId: sneaker._id,
+                size: parseFloat(selectedSize),
+                quantity: 1,
+                price: sneaker.salePrice || sneaker.price
+              }],
+              total: total,
+              shippingAddress: {
+                fullName: shippingInfo.fullName,
+                address: shippingInfo.address,
+                city: shippingInfo.city,
+                state: shippingInfo.state,
+                zipCode: shippingInfo.zipCode
+              }
+            }
+          }
+        });
+        console.log('Order added:', data.addOrder);
+        // Redirect to the orders page after successful order creation
+        navigate('/orders');
+      } catch (err) {
+        console.error('Error adding order:', err);
+      }
+    } else {
+      console.log('User not logged in, order not saved');
+      // Redirect to the confirmation page for guest users
+      navigate('/checkout-confirmation', {
+        state: {
+          orderDetails: {
+            orderNumber: 'G-' + Math.random().toString(36).substr(2, 9),
+            total: total,
+            estimatedDelivery: '3-5 business days',
+            shippingAddress: shippingInfo,
+            sneaker: {
+              ...sneaker,
+              selectedSize: selectedSize
+            }
+          }
+        }
+      });
+    }
+  };
 
   useEffect(() => {
-    const isValid = Object.values(shippingInfo).every(
-      (value) => value.trim() !== ""
-    );
-    setIsFormValid(isValid);
-  }, [shippingInfo]);
+    const checkFormValidity = () => {
+      const requiredFields = ['fullName', 'address', 'city', 'state', 'zipCode'];
+      if (isGuest) {
+        requiredFields.push('email');
+      }
+      
+      const allFieldsFilled = requiredFields.every(field => shippingInfo[field].trim() !== '');
+      setIsFormValid(allFieldsFilled);
+    };
+
+    checkFormValidity();
+  }, [shippingInfo, isGuest]);
 
   if (!sneaker) {
     return (
@@ -162,28 +229,45 @@ const CheckoutPage = () => {
   const total = subtotal + shipping + tax;
 
   const handleShippingInfoChange = (event) => {
-    setShippingInfo({
-      ...shippingInfo,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setShippingInfo(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleGuestCheckout = () => {
+    setIsGuest(true);
+  };
+
+  const handleSignUp = () => {
+    navigate('/signup');
   };
 
   return (
     <Container maxWidth="lg" className="checkout-page">
+      <Typography variant="h4" component="h1" gutterBottom className="checkout-title">
+        Checkout
+      </Typography>
+      <Stepper activeStep={1} alternativeLabel className="checkout-stepper">
+        <Step><StepLabel>Cart</StepLabel></Step>
+        <Step><StepLabel>Shipping & Payment</StepLabel></Step>
+        <Step><StepLabel>Confirmation</StepLabel></Step>
+      </Stepper>
       <Grid container spacing={4}>
-        <Grid item xs={12} md={7}>
-          <Paper elevation={3} className="order-summary">
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} className="checkout-paper">
             <Typography variant="h5" gutterBottom>
               Order Summary
             </Typography>
-            <Divider />
+            <Divider className="summary-divider" />
             <Box className="sneaker-summary">
               <img
                 src={sneaker.imageUrl}
                 alt={sneaker.name}
                 className="sneaker-image"
               />
-              <Box>
+              <Box className="sneaker-details">
                 <Typography variant="h6">{sneaker.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   US {sneaker.gender} Size {selectedSize}
@@ -191,8 +275,12 @@ const CheckoutPage = () => {
                 <Typography variant="body2" color="textSecondary">
                   {sneaker.brand}
                 </Typography>
+                <Typography variant="h6" className="sneaker-price">
+                  ${(sneaker.salePrice || sneaker.price).toFixed(2)}
+                </Typography>
               </Box>
             </Box>
+            <Divider className="summary-divider" />
             <Typography variant="h6" gutterBottom>
               Shipping Options
             </Typography>
@@ -224,6 +312,7 @@ const CheckoutPage = () => {
                 </Typography>
               </Paper>
             </Box>
+            <Divider className="summary-divider" />
             <Box className="cost-summary">
               <Box className="cost-item">
                 <Typography>Subtotal</Typography>
@@ -239,7 +328,7 @@ const CheckoutPage = () => {
                 <Typography color="textSecondary">Estimated Tax</Typography>
                 <Typography color="textSecondary">${tax.toFixed(2)}</Typography>
               </Box>
-              <Divider />
+              <Divider className="summary-divider" />
               <Box className="cost-item total">
                 <Typography variant="h6">Total</Typography>
                 <Typography variant="h6">${total.toFixed(2)}</Typography>
@@ -247,75 +336,120 @@ const CheckoutPage = () => {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={5}>
-          <Paper elevation={3} className="payment-form">
-            <Typography variant="h6" gutterBottom>
-              Shipping Information
-            </Typography>
-            <TextField
-              required
-              fullWidth
-              label="Full Name"
-              name="fullName"
-              value={shippingInfo.fullName}
-              onChange={handleShippingInfoChange}
-              margin="normal"
-            />
-            <TextField
-              required
-              fullWidth
-              label="Address"
-              name="address"
-              value={shippingInfo.address}
-              onChange={handleShippingInfoChange}
-              margin="normal"
-            />
-            <TextField
-              required
-              fullWidth
-              label="City"
-              name="city"
-              value={shippingInfo.city}
-              onChange={handleShippingInfoChange}
-              margin="normal"
-            />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} className="checkout-paper">
+            {isGuest || Auth.loggedIn() ? (
+              <>
+                <Typography variant="h5" gutterBottom>
+                  Shipping Information
+                </Typography>
+                <Divider className="summary-divider" />
+                {isGuest && (
+                  <TextField
+                    required
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={shippingInfo.email}
+                    onChange={handleShippingInfoChange}
+                    margin="normal"
+                  />
+                )}
                 <TextField
                   required
                   fullWidth
-                  label="State"
-                  name="state"
-                  value={shippingInfo.state}
+                  label="Full Name"
+                  name="fullName"
+                  value={shippingInfo.fullName}
                   onChange={handleShippingInfoChange}
                   margin="normal"
                 />
-              </Grid>
-              <Grid item xs={6}>
                 <TextField
                   required
                   fullWidth
-                  label="ZIP Code"
-                  name="zipCode"
-                  value={shippingInfo.zipCode}
+                  label="Address"
+                  name="address"
+                  value={shippingInfo.address}
                   onChange={handleShippingInfoChange}
                   margin="normal"
                 />
-              </Grid>
-            </Grid>
-            <FormControlLabel
-              control={<Checkbox color="primary" />}
-              label="Billing address same as shipping"
-              className="billing-checkbox"
-            />
-            <Divider className="form-divider" />
-            <Elements stripe={stripePromise}>
-              <PaymentForm
-                total={total}
-                shippingInfo={shippingInfo}
-                isFormValid={isFormValid}
-              />
-            </Elements>
+                <TextField
+                  required
+                  fullWidth
+                  label="City"
+                  name="city"
+                  value={shippingInfo.city}
+                  onChange={handleShippingInfoChange}
+                  margin="normal"
+                />
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="State"
+                      name="state"
+                      value={shippingInfo.state}
+                      onChange={handleShippingInfoChange}
+                      margin="normal"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      label="ZIP Code"
+                      name="zipCode"
+                      value={shippingInfo.zipCode}
+                      onChange={handleShippingInfoChange}
+                      margin="normal"
+                    />
+                  </Grid>
+                </Grid>
+                <FormControlLabel
+                  control={<Checkbox color="primary" />}
+                  label="Billing address same as shipping"
+                  className="billing-checkbox"
+                />
+                <Divider className="summary-divider" />
+                
+                <Elements stripe={stripePromise}>
+                  <PaymentForm
+                    total={total}
+                    shippingInfo={shippingInfo}
+                    isFormValid={isFormValid}
+                    sneaker={sneaker}
+                    selectedSize={selectedSize}
+                    handleOrderCreation={handleOrderCreation}
+                  />
+                </Elements>
+              </>
+            ) : (
+              <Box className="guest-options">
+                <Typography variant="h6" gutterBottom>
+                  Checkout Options
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={handleSignUp}
+                  className="signup-button"
+                >
+                  Sign Up
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  onClick={handleGuestCheckout}
+                  className="guest-button"
+                >
+                  Continue as Guest
+                </Button>
+              </Box>
+            )}
           </Paper>
         </Grid>
       </Grid>
