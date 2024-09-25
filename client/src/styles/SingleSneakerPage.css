@@ -25,6 +25,11 @@
     max-width: 100%;
     height: auto;
     object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+  
+  .single-sneaker-image:hover {
+    transform: scale(1.05);
   }
   
   .single-sneaker-details-container {
@@ -56,8 +61,20 @@
     font-weight: 600;
     color: #4CAF50;
     margin-bottom: 24px;
+    animation: priceFadeIn 0.5s ease;
   }
   
+  @keyframes priceFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .single-sneaker-description {
     margin-bottom: 24px;
     color: #555;
@@ -150,6 +167,8 @@
     color: #757575;
     text-decoration: none;
   }
+
+  
   
   .single-sneaker-breadcrumbs a:hover {
     text-decoration: underline;
@@ -162,5 +181,112 @@
   
     .single-sneaker-image-container {
       margin-bottom: 24px;
+    }
+  }
+
+  .purchase-drawer .MuiDrawer-paper {
+    width: 400px;
+    max-width: 100%;
+    z-index: 1400 !important; /* Extremely high z-index to ensure it's on top */
+  }
+
+  .purchase-drawer-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px;
+    background-color: #ffffff; /* Ensure the background is solid */
+  }
+
+  .purchase-drawer-header {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .purchase-drawer-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .purchase-drawer-size {
+    color: #757575;
+    margin-bottom: 16px;
+  }
+
+  .purchase-drawer-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #757575;
+    transition: color 0.3s ease;
+  }
+
+  .purchase-drawer-close:hover {
+    color: #333;
+  }
+
+  .purchase-drawer-close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .purchase-drawer-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+
+  .purchase-drawer-price-box {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .purchase-drawer-price {
+    font-weight: 700;
+    color: #4CAF50;
+    margin-bottom: 8px;
+  }
+
+  .purchase-drawer-tax-info {
+    color: #757575;
+  }
+
+  .purchase-drawer-policy {
+    color: #757575;
+    margin-bottom: 24px;
+  }
+
+  .purchase-drawer-checkout-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: #4CAF50;
+    color: white;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .purchase-drawer-checkout-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+  }
+
+  @media (max-width: 600px) {
+    .purchase-drawer .MuiDrawer-paper {
+      width: 100%;
     }
   }

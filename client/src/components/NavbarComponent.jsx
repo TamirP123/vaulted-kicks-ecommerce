@@ -83,7 +83,6 @@ const NavbarComponent = () => {
       position="fixed"
       className={`navbar ${scrolled ? "scrolled" : ""}`}
       elevation={0}
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
       <Toolbar className="toolbar">
         {!isSearchActive ? (
