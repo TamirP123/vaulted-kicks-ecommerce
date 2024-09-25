@@ -12,7 +12,7 @@ import Homepage from './pages/Homepage.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import SneakersPage from './pages/SneakersPage.jsx';
 import SingleSneakerPage from './pages/SingleSneakerPage.jsx';
-
+import CheckoutPage from './pages/CheckoutPage.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: 'sneaker/:id',
         element: <SingleSneakerPage />
+      },
+      {
+        path: 'checkout',
+        element: <CheckoutPage />
       },
       // {
       //   path: 'login',

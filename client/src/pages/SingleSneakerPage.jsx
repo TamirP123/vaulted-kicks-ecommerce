@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_SINGLE_SNEAKER } from '../utils/queries';
 import {
@@ -22,12 +22,14 @@ const SingleSneakerPage = () => {
   });
   const [selectedSize, setSelectedSize] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
   if (!data || !data.sneaker) return <Typography>Sneaker not found</Typography>;
 
   const sneaker = data.sneaker;
+  const currentPrice = sneaker.salePrice || sneaker.price;
 
   const handlePurchase = () => {
     setIsDrawerOpen(true);
@@ -35,6 +37,11 @@ const SingleSneakerPage = () => {
 
   const handleCloseDrawer = () => {
     setIsDrawerOpen(false);
+  };
+
+  const handleProceedToCheckout = () => {
+    navigate('/checkout', { state: { sneaker, selectedSize } });
+    handleCloseDrawer();
   };
 
   return (
@@ -59,7 +66,14 @@ const SingleSneakerPage = () => {
             {sneaker.name}
           </Typography>
           <Typography className="single-sneaker-price">
-            ${sneaker.price.toFixed(2)}
+            {sneaker.salePrice ? (
+              <>
+                <span className="original-price">${sneaker.price.toFixed(2)}</span>
+                <span className="sale-price">${sneaker.salePrice.toFixed(2)}</span>
+              </>
+            ) : (
+              `$${sneaker.price.toFixed(2)}`
+            )}
           </Typography>
           <Typography className="single-sneaker-description">
             {sneaker.description || "Experience ultimate comfort and style with these premium sneakers."}
@@ -91,7 +105,7 @@ const SingleSneakerPage = () => {
             disabled={!selectedSize}
             onClick={handlePurchase}
           >
-            {selectedSize ? `Purchase for $${sneaker.price.toFixed(2)}` : 'Select Size'}
+            {selectedSize ? `Purchase for $${currentPrice.toFixed(2)}` : 'Select Size'}
           </Button>
           
           <Drawer
@@ -120,10 +134,15 @@ const SingleSneakerPage = () => {
               <Box className="purchase-drawer-details">
                 <Box className="purchase-drawer-price-box">
                   <Typography variant="h5" className="purchase-drawer-price">
-                    ${sneaker.price.toFixed(2)}
+                    ${currentPrice.toFixed(2)}
                   </Typography>
+                  {sneaker.salePrice && (
+                    <Typography variant="body2" className="purchase-drawer-original-price">
+                      Original price: ${sneaker.price.toFixed(2)}
+                    </Typography>
+                  )}
                   <Typography variant="body2" className="purchase-drawer-tax-info">
-                    Tax included. Shipping calculated at checkout.
+                    Tax not included. Shipping calculated at checkout.
                   </Typography>
                 </Box>
                 <Typography variant="body2" className="purchase-drawer-policy">
@@ -135,6 +154,7 @@ const SingleSneakerPage = () => {
                 color="primary"
                 size="large"
                 className="purchase-drawer-checkout-button"
+                onClick={handleProceedToCheckout}
               >
                 Proceed to Checkout
               </Button>
