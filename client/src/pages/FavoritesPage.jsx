@@ -15,25 +15,40 @@ const FavoritesPage = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_USER_FAVORITES);
 
   if (loading) return <CircularProgress className="loading-spinner" />;
-  if (error) return <Typography color="error">Error: {error.message}</Typography>;
+  if (error)
+    return <Typography color="error">Error: {error.message}</Typography>;
 
   const favorites = data?.me?.favorites || [];
-  console.log('Favorites:', favorites);
+  console.log("Favorites:", favorites);
 
   return (
     <Box className="favorites-page">
       <Container maxWidth="xl">
-        <Typography variant="h4" component="h1" className="page-title">
+        <Typography
+          variant="h4"
+          component="h1"
+          className="page-title"
+          sx={{ marginBottom: 3 }}
+        >
           Your Favorites
         </Typography>
         {favorites.length === 0 ? (
           <Typography variant="body1" className="no-favorites">
-            You haven't added any favorites yet. Start shopping and add some sneakers to your favorites!
+            You haven't added any favorites yet. Start shopping and add some
+            sneakers to your favorites!
           </Typography>
         ) : (
           <Grid container spacing={4} className="favorites-grid">
             {favorites.map((sneaker) => (
-              <Grid item key={sneaker._id} xs={12} sm={6} md={4} lg={3}>
+              <Grid
+                item
+                key={sneaker._id}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                sx={{ marginBottom: 3 }}
+              >
                 <SneakerCard
                   sneaker={sneaker}
                   isFavorite={true}

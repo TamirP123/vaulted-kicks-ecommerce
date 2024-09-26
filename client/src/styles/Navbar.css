@@ -107,6 +107,39 @@
   }
 }
 
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .toolbar {
+    padding: 5px 10px;
+  }
+
+  .navbar-title {
+    font-size: 1.8rem !important;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+  }
+
+  /* Additional padding for single sneaker page and checkout page on mobile */
+  .single-sneaker-page {
+    padding-top: 90px !important; /* Increase this value as needed */
+  }
+  .checkout-page,
+  .orders-page,
+  .favorites-page {
+    padding-top: 165px !important; /* Increase this value as needed */
+  }
+}
+
 /* New styles for Account dropdown */
 .account-button {
   color: #333 !important;

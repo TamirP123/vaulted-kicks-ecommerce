@@ -6,6 +6,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import OrdersPage from "./pages/OrdersPage.jsx";
 import CheckoutConfirmation from "./pages/CheckoutConfirmation.jsx";
 
+
 const stripePromise = loadStripe(
   "pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH"
 );

@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
 // Import React Icons
-import { FaSearch, FaUserCircle } from 'react-icons/fa';
+import { FaSearch, FaUserCircle } from "react-icons/fa";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -99,7 +99,7 @@ const NavbarComponent = () => {
 
   const handleSaleClick = (e) => {
     e.preventDefault();
-    navigate('/sneakers?sale=true');
+    navigate("/sneakers?sale=true");
   };
 
   const handleSearchSubmit = (e) => {
@@ -134,19 +134,27 @@ const NavbarComponent = () => {
               </Search>
             </Box>
 
-            <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
               <Typography variant="h4" className="navbar-title navbar-section">
                 Vaulted Kicks
               </Typography>
             </Link>
 
             <Box className="navbar-links navbar-section">
-              <Link to="/sneakers" style={{ textDecoration: 'none', color: 'black' }}>
+              <Link
+                to="/sneakers"
+                style={{ textDecoration: "none", color: "black" }}
+              >
                 <a href="#" className="nav-link">
                   Sneakers
                 </a>
               </Link>
-              <a href="#" className="nav-link" style={{ textDecoration: 'none', color: 'black' }} onClick={handleSaleClick}>
+              <a
+                href="#"
+                className="nav-link"
+                style={{ textDecoration: "none", color: "black" }}
+                onClick={handleSaleClick}
+              >
                 Sale
               </a>
               {Auth.loggedIn() ? (
@@ -164,17 +172,28 @@ const NavbarComponent = () => {
                     onClose={handleAccountClose}
                     className="account-menu"
                   >
-                    <MenuItem onClick={handleAccountClose} component={Link} to="/orders">
+                    <MenuItem
+                      onClick={handleAccountClose}
+                      component={Link}
+                      to="/orders"
+                    >
                       My Orders
                     </MenuItem>
-                    <MenuItem onClick={handleAccountClose} component={Link} to="/favorites">
+                    <MenuItem
+                      onClick={handleAccountClose}
+                      component={Link}
+                      to="/favorites"
+                    >
                       My Favorites
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </>
               ) : (
-                <Link to="/login" style={{ textDecoration: 'none', color: 'black' }}>
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
                   <a href="#" className="nav-link">
                     Login
                   </a>
@@ -183,8 +202,8 @@ const NavbarComponent = () => {
             </Box>
           </>
         ) : (
-          <SearchDropdown 
-            onClose={handleSearchClose} 
+          <SearchDropdown
+            onClose={handleSearchClose}
             onSubmit={handleSearchSubmit}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}

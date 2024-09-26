@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ALL_SNEAKERS, QUERY_USER_FAVORITES } from "../utils/queries";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import Auth from "../utils/auth";
 import {
   Box,
@@ -25,16 +25,21 @@ import "../styles/RecommendedSection.css";
 const SneakersPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const saleFilter = queryParams.get('sale') === 'true';
-  const searchQuery = queryParams.get('search') || '';
+  const saleFilter = queryParams.get("sale") === "true";
+  const searchQuery = queryParams.get("search") || "";
 
   const isLoggedIn = Auth.loggedIn();
   const { loading, error, data } = useQuery(QUERY_ALL_SNEAKERS, {
     onError: (error) => {
-      console.error('Error fetching sneakers:', error);
-    }
+      console.error("Error fetching sneakers:", error);
+    },
   });
-  const { loading: loadingFavorites, error: favoritesError, data: favoritesData, refetch: refetchFavorites } = useQuery(QUERY_USER_FAVORITES, {
+  const {
+    loading: loadingFavorites,
+    error: favoritesError,
+    data: favoritesData,
+    refetch: refetchFavorites,
+  } = useQuery(QUERY_USER_FAVORITES, {
     skip: !isLoggedIn,
   });
   const [filteredSneakers, setFilteredSneakers] = useState([]);
@@ -57,10 +62,10 @@ const SneakersPage = () => {
 
   useEffect(() => {
     // Reset filters when the location changes
-    setFilters(prevFilters => ({
+    setFilters((prevFilters) => ({
       ...prevFilters,
-      onSale: queryParams.get('sale') === 'true',
-      search: queryParams.get('search') || '',
+      onSale: queryParams.get("sale") === "true",
+      search: queryParams.get("search") || "",
     }));
   }, [location.search]);
 
@@ -76,7 +81,9 @@ const SneakersPage = () => {
       const filtered = data.allSneakers.filter((sneaker) => {
         const matchesSearch = filters.search
           ? sneaker.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            sneaker.brand.toLowerCase().includes(filters.search.toLowerCase()) ||
+            sneaker.brand
+              .toLowerCase()
+              .includes(filters.search.toLowerCase()) ||
             sneaker.model.toLowerCase().includes(filters.search.toLowerCase())
           : true;
 
@@ -109,17 +116,21 @@ const SneakersPage = () => {
 
   if (loading || (isLoggedIn && loadingFavorites)) return <CircularProgress />;
   if (error) {
-    console.error('Error details:', error);
-    return <Typography color="error">Error fetching sneakers: {error.message}</Typography>;
+    console.error("Error details:", error);
+    return (
+      <Typography color="error">
+        Error fetching sneakers: {error.message}
+      </Typography>
+    );
   }
   if (favoritesError) {
-    console.error('Error fetching favorites:', favoritesError);
+    console.error("Error fetching favorites:", favoritesError);
     // Don't return here, we can still show sneakers without favorites
   }
 
   const sneakers = data?.allSneakers || [];
   const userFavorites = favoritesData?.me?.favorites || [];
-  const favoriteIds = new Set(userFavorites.map(fav => fav._id));
+  const favoriteIds = new Set(userFavorites.map((fav) => fav._id));
   const brands = [...new Set(sneakers.map((sneaker) => sneaker.brand))];
   const models = [...new Set(sneakers.map((sneaker) => sneaker.model))];
   const sizes = [
@@ -138,7 +149,7 @@ const SneakersPage = () => {
             className="page-title"
             gutterBottom
           >
-            {searchQuery 
+            {searchQuery
               ? `Search Results for "${searchQuery}"`
               : "Shop For Sneakers"}
           </Typography>
@@ -291,7 +302,9 @@ const SneakersPage = () => {
                     control={
                       <Checkbox
                         checked={filters.onSale}
-                        onChange={(e) => handleFilterChange("onSale", e.target.checked)}
+                        onChange={(e) =>
+                          handleFilterChange("onSale", e.target.checked)
+                        }
                       />
                     }
                     label="On Sale"
@@ -303,7 +316,9 @@ const SneakersPage = () => {
                   <input
                     type="text"
                     value={filters.search}
-                    onChange={(e) => handleFilterChange("search", e.target.value)}
+                    onChange={(e) =>
+                      handleFilterChange("search", e.target.value)
+                    }
                     placeholder="Search sneakers..."
                   />
                 </FormGroup>

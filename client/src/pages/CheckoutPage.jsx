@@ -32,7 +32,14 @@ const stripePromise = loadStripe(
   "pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH"
 );
 
-const PaymentForm = ({ total, shippingInfo, isFormValid, sneaker, selectedSize, handleOrderCreation }) => {
+const PaymentForm = ({
+  total,
+  shippingInfo,
+  isFormValid,
+  sneaker,
+  selectedSize,
+  handleOrderCreation,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -158,57 +165,67 @@ const CheckoutPage = () => {
         const { data } = await addOrder({
           variables: {
             input: {
-              items: [{
-                sneakerId: sneaker._id,
-                size: parseFloat(selectedSize),
-                quantity: 1,
-                price: sneaker.salePrice || sneaker.price
-              }],
+              items: [
+                {
+                  sneakerId: sneaker._id,
+                  size: parseFloat(selectedSize),
+                  quantity: 1,
+                  price: sneaker.salePrice || sneaker.price,
+                },
+              ],
               total: total,
               shippingAddress: {
                 fullName: shippingInfo.fullName,
                 address: shippingInfo.address,
                 city: shippingInfo.city,
                 state: shippingInfo.state,
-                zipCode: shippingInfo.zipCode
-              }
-            }
-          }
+                zipCode: shippingInfo.zipCode,
+              },
+            },
+          },
         });
-        console.log('Order added:', data.addOrder);
+        console.log("Order added:", data.addOrder);
         // Redirect to the orders page after successful order creation
-        navigate('/orders');
+        navigate("/orders");
       } catch (err) {
-        console.error('Error adding order:', err);
+        console.error("Error adding order:", err);
       }
     } else {
-      console.log('User not logged in, order not saved');
+      console.log("User not logged in, order not saved");
       // Redirect to the confirmation page for guest users
-      navigate('/checkout-confirmation', {
+      navigate("/checkout-confirmation", {
         state: {
           orderDetails: {
-            orderNumber: 'G-' + Math.random().toString(36).substr(2, 9),
+            orderNumber: "G-" + Math.random().toString(36).substr(2, 9),
             total: total,
-            estimatedDelivery: '3-5 business days',
+            estimatedDelivery: "3-5 business days",
             shippingAddress: shippingInfo,
             sneaker: {
               ...sneaker,
-              selectedSize: selectedSize
-            }
-          }
-        }
+              selectedSize: selectedSize,
+            },
+          },
+        },
       });
     }
   };
 
   useEffect(() => {
     const checkFormValidity = () => {
-      const requiredFields = ['fullName', 'address', 'city', 'state', 'zipCode'];
+      const requiredFields = [
+        "fullName",
+        "address",
+        "city",
+        "state",
+        "zipCode",
+      ];
       if (isGuest) {
-        requiredFields.push('email');
+        requiredFields.push("email");
       }
-      
-      const allFieldsFilled = requiredFields.every(field => shippingInfo[field].trim() !== '');
+
+      const allFieldsFilled = requiredFields.every(
+        (field) => shippingInfo[field].trim() !== ""
+      );
       setIsFormValid(allFieldsFilled);
     };
 
@@ -230,7 +247,7 @@ const CheckoutPage = () => {
 
   const handleShippingInfoChange = (event) => {
     const { name, value } = event.target;
-    setShippingInfo(prevState => ({
+    setShippingInfo((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -241,18 +258,29 @@ const CheckoutPage = () => {
   };
 
   const handleSignUp = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   return (
     <Container maxWidth="lg" className="checkout-page">
-      <Typography variant="h4" component="h1" gutterBottom className="checkout-title">
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        className="checkout-title"
+      >
         Checkout
       </Typography>
       <Stepper activeStep={1} alternativeLabel className="checkout-stepper">
-        <Step><StepLabel>Cart</StepLabel></Step>
-        <Step><StepLabel>Shipping & Payment</StepLabel></Step>
-        <Step><StepLabel>Confirmation</StepLabel></Step>
+        <Step>
+          <StepLabel>Cart</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Shipping & Payment</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Confirmation</StepLabel>
+        </Step>
       </Stepper>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
@@ -413,7 +441,7 @@ const CheckoutPage = () => {
                   className="billing-checkbox"
                 />
                 <Divider className="summary-divider" />
-                
+
                 <Elements stripe={stripePromise}>
                   <PaymentForm
                     total={total}

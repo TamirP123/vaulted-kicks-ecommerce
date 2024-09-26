@@ -36,7 +36,7 @@ body {
   background-color: #f3f1ed;
 }
 /* Mobile-specific styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768) {
   /* Ensure full width and prevent horizontal scrolling */
   body, #root, .app-container, .content {
     width: 100%;
@@ -46,7 +46,7 @@ body {
 
   /* Adjust padding and margins for mobile */
   .content {
-    padding: 0 10px;
+    padding-top: 100px; /* Increase the padding for mobile view */
   }
 
   /* Make images responsive */
