@@ -12,7 +12,7 @@ const httpLink = createHttpLink({
 });
 
 import NavbarComponent from "./components/NavbarComponent";
-// import Footer from "./components/Footer.jsx";
+// import Footer from "./components/Footer";
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");

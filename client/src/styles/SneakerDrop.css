@@ -1,0 +1,154 @@
+.sneaker-drop {
+  display: flex;
+  background: linear-gradient(135deg, #f8f8f8 0%, #e0e0e0 100%);
+  padding: 6rem 4rem;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.sneaker-drop::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/public/assets/pattern.png') repeat;
+  opacity: 0.05;
+  z-index: 1;
+}
+
+.sneaker-drop-content {
+  flex: 1;
+  padding-right: 4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.sneaker-drop h2 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.sneaker-drop .highlight {
+  color: #4CAF50;
+}
+
+.sneaker-drop p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+.sneaker-drop-form {
+  display: flex;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.sneaker-drop-form input {
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+}
+
+.sneaker-drop-form button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sneaker-drop-form button:hover {
+  background-color: #ff5252;
+}
+
+.success-message {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sneaker-drop-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.sneaker-drop-image img {
+  max-width: 100%;
+  height: auto;
+  transform: rotate(-15deg) translateY(-20px);
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+}
+
+.sneaker-drop-image img:hover {
+  transform: rotate(-15deg) translateY(-30px) scale(1.05);
+}
+
+@media (max-width: 1024px) {
+  .sneaker-drop {
+    padding: 4rem 2rem;
+  }
+
+  .sneaker-drop-content {
+    padding-right: 2rem;
+  }
+
+  .sneaker-drop h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sneaker-drop {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sneaker-drop-content {
+    padding-right: 0;
+    margin-bottom: 3rem;
+  }
+
+  .sneaker-drop-form {
+    margin: 0 auto;
+  }
+
+  .sneaker-drop p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sneaker-drop-image img {
+    transform: rotate(0) translateY(0);
+  }
+
+  .sneaker-drop-image img:hover {
+    transform: rotate(0) translateY(-10px) scale(1.05);
+  }
+}

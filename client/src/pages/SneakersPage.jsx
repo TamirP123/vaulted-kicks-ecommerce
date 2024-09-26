@@ -21,6 +21,7 @@ import { FilterList } from "@mui/icons-material";
 import SneakerCard from "../components/SneakerCard"; // Import SneakerCard component
 import "../styles/SneakersPage.css";
 import "../styles/RecommendedSection.css";
+import Footer from "../components/Footer";
 
 const SneakersPage = () => {
   const location = useLocation();
