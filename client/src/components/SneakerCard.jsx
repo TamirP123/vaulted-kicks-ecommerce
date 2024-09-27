@@ -41,7 +41,9 @@ const SneakerCard = ({ sneaker, isFavorite, refetchFavorites, cardClassName }) =
       }
       setLocalIsFavorite(!localIsFavorite);
       setOpenSnackbar(true);
-      if (refetchFavorites) refetchFavorites();
+      if (refetchFavorites) {
+        await refetchFavorites();
+      }
     } catch (error) {
       console.error("Error updating favorites:", error);
       setSnackbarMessage("Error updating favorites");

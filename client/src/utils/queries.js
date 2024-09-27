@@ -182,19 +182,18 @@ export const QUERY_USER_ORDERS = gql`
 
 // Add this query
 export const QUERY_USER_FAVORITES = gql`
-  query getUserFavorites {
+  query {
     me {
       _id
       username
       favorites {
         _id
         brand
-        model
         name
-        imageUrl
         price
-        onSale
         salePrice
+        onSale
+        imageUrl
       }
     }
   }

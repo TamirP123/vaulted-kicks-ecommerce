@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useApolloClient } from "@apollo/client";
 import { QUERY_USER_FAVORITES } from "../utils/queries";
 import SneakerCard from "../components/SneakerCard";
 import {
@@ -13,19 +13,33 @@ import "../styles/FavoritesPage.css";
 
 const FavoritesPage = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_USER_FAVORITES, {
-    fetchPolicy: "network-only" // This ensures we always fetch from the server
+    fetchPolicy: "network-only"
   });
+  const client = useApolloClient();
 
   useEffect(() => {
     refetch();
   }, [refetch]);
 
+  useEffect(() => {
+    if (data) {
+      console.log("Favorites data:", data);
+      console.log("Number of favorites:", data.me?.favorites?.length);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    client.resetStore();
+  }, [client]);
+
   if (loading) return <CircularProgress className="loading-spinner" />;
-  if (error)
+  if (error) {
+    console.error("Error fetching favorites:", error);
     return <Typography color="error">Error: {error.message}</Typography>;
+  }
 
   const favorites = data?.me?.favorites || [];
-  console.log("Favorites:", favorites);
+  console.log("Rendered favorites:", favorites);
 
   return (
     <Box className="favorites-page">
@@ -36,7 +50,7 @@ const FavoritesPage = () => {
           className="page-title"
           sx={{ marginBottom: 3 }}
         >
-          Your Favorites
+          Your Favorites ({favorites.length})
         </Typography>
         {favorites.length === 0 ? (
           <Typography variant="body1" className="no-favorites">

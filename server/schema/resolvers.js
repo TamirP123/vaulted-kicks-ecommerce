@@ -16,7 +16,10 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("favorites");
+        const user = await User.findOne({ _id: context.user._id }).populate('favorites');
+        console.log("User from database:", user);
+        console.log("Number of favorites:", user.favorites.length);
+        return user;
       }
       throw new AuthenticationError("Not authenticated");
     },
