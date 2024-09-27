@@ -16,7 +16,7 @@ import {
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import "../styles/SneakerCard.css"; // Import the new CSS file
 
-const SneakerCard = ({ sneaker, isFavorite, refetchFavorites }) => {
+const SneakerCard = ({ sneaker, isFavorite, refetchFavorites, cardClassName }) => {
   const [localIsFavorite, setLocalIsFavorite] = useState(isFavorite);
   const [addToFavorites] = useMutation(ADD_TO_FAVORITES);
   const [removeFromFavorites] = useMutation(REMOVE_FROM_FAVORITES);
@@ -51,7 +51,7 @@ const SneakerCard = ({ sneaker, isFavorite, refetchFavorites }) => {
 
   return (
     <>
-      <Card className="sneaker-card">
+      <Card className={cardClassName} sx={{ maxWidth: 345, position: 'relative' }}>
         <Link
           to={`/sneaker/${sneaker._id}`}
           style={{ textDecoration: "none", color: "inherit" }}

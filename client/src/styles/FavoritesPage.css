@@ -35,6 +35,11 @@
   height: 100vh;
 }
 
+/* Updated styles for the favorite sneaker card */
+.favorite-sneaker-card .MuiCardMedia-root {
+  height: 220px !important;
+}
+
 @media (max-width: 600px) {
   .favorites-page {
     padding: 60px 0 20px;

@@ -35,11 +35,11 @@
 }
 
 .sneaker-image {
+  max-width: 100%;
   width: 100px;
-  height: 100px;
-  object-fit: cover;
-  margin-right: 20px;
-  border-radius: 4px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 .sneaker-details {

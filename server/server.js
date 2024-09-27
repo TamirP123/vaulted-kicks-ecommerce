@@ -21,7 +21,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/your_database_n
 
 const server = new ApolloServer({ 
     typeDefs, 
-    resolvers
+    resolvers,
+    context: authMiddleware
 });
 
 const startApolloServer = async () => {

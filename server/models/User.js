@@ -21,6 +21,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   orders: [
     {
       type: Schema.Types.ObjectId,

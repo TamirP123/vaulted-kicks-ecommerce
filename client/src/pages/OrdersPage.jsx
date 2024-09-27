@@ -1,46 +1,55 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { QUERY_USER_ORDERS } from '../utils/queries';
-import { 
-  Container, 
-  Typography, 
-  Paper, 
-  Grid, 
-  Box, 
-  Chip, 
+import React, { useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { QUERY_USER_ORDERS } from "../utils/queries";
+import {
+  Container,
+  Typography,
+  Paper,
+  Grid,
+  Box,
+  Chip,
   Divider,
-  CircularProgress
-} from '@mui/material';
-import { format, parseISO } from 'date-fns';
-import '../styles/OrdersPage.css';
+  CircularProgress,
+} from "@mui/material";
+import { format, parseISO } from "date-fns";
+import "../styles/OrdersPage.css";
 
 // Add this utility function
 const formatDate = (dateString) => {
-  if (!dateString) return 'N/A';
+  if (!dateString) return "N/A";
   try {
-    return format(parseISO(dateString), 'MMMM d, yyyy');
+    return format(parseISO(dateString), "MMMM d, yyyy");
   } catch (error) {
-    console.error('Error parsing date:', error);
-    return 'Invalid Date';
+    console.error("Error parsing date:", error);
+    return "Invalid Date";
   }
 };
 
 const OrdersPage = () => {
-  const { loading, error, data } = useQuery(QUERY_USER_ORDERS);
+  const { loading, error, data, refetch } = useQuery(QUERY_USER_ORDERS);
 
-  console.log('OrdersPage Query Result:', { loading, error, data });
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  console.log("OrdersPage Query Result:", { loading, error, data });
 
   if (loading) return <CircularProgress />;
   if (error) return <Typography color="error">Error: {error.message}</Typography>;
 
   const { userOrders } = data || {};
 
-  console.log('User Orders:', userOrders);
+  console.log("User Orders:", userOrders);
 
   if (!userOrders || userOrders.length === 0) {
     return (
       <Container maxWidth="lg" className="orders-page">
-        <Typography variant="h4" component="h1" gutterBottom className="page-title">
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          className="page-title"
+        >
           My Orders
         </Typography>
         <Paper elevation={3} className="no-orders-paper">
@@ -54,7 +63,12 @@ const OrdersPage = () => {
 
   return (
     <Container maxWidth="lg" className="orders-page">
-      <Typography variant="h4" component="h1" gutterBottom className="page-title">
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        className="page-title"
+      >
         My Orders
       </Typography>
       {userOrders.map((order) => (
@@ -69,9 +83,9 @@ const OrdersPage = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} className="order-status">
-              <Chip 
-                label={order.status} 
-                color={order.status === 'Delivered' ? 'success' : 'primary'} 
+              <Chip
+                label={order.status}
+                color={order.status === "Delivered" ? "success" : "primary"}
                 variant="outlined"
               />
             </Grid>
@@ -84,15 +98,27 @@ const OrdersPage = () => {
               </Typography>
               {order.items.map((item, index) => (
                 <Box key={index} className="order-item">
-                  <img src={item.sneaker.imageUrl} alt={item.sneaker.name} className="order-item-image" />
-                  <Box>
+                  {item.sneaker ? (
+                    <>
+                      <img
+                        src={item.sneaker.imageUrl}
+                        alt={item.sneaker.name}
+                        className="order-item-image"
+                      />
+                      <Box>
+                        <Typography variant="body1">
+                          {item.sneaker.name} - Size {item.size}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          Quantity: {item.quantity} x ${item.price.toFixed(2)}
+                        </Typography>
+                      </Box>
+                    </>
+                  ) : (
                     <Typography variant="body1">
-                      {item.sneaker.name} - Size {item.size}
+                      Item no longer available - Size {item.size}, Quantity: {item.quantity}, Price: ${item.price.toFixed(2)}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Quantity: {item.quantity} x ${item.price.toFixed(2)}
-                    </Typography>
-                  </Box>
+                  )}
                 </Box>
               ))}
             </Grid>
@@ -104,9 +130,12 @@ const OrdersPage = () => {
                 Shipping Address:
               </Typography>
               <Typography variant="body2">
-                {order.shippingAddress.fullName}<br />
-                {order.shippingAddress.address}<br />
-                {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zipCode}
+                {order.shippingAddress.fullName}
+                <br />
+                {order.shippingAddress.address}
+                <br />
+                {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
+                {order.shippingAddress.zipCode}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} className="order-total">

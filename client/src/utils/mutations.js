@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
@@ -13,16 +13,8 @@ export const LOGIN = gql`
 `;
 
 export const ADD_USER = gql`
-  mutation addUser(
-    $username: String!
-    $email: String!
-    $password: String!
-  ) {
-    addUser(
-      username: $username
-      email: $email
-      password: $password
-    ) {
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
       token
       user {
         _id
@@ -92,4 +84,60 @@ export const REMOVE_FROM_FAVORITES = gql`
   }
 `;
 
+export const UPDATE_SNEAKER = gql`
+  mutation updateSneaker($id: ID!, $input: SneakerInput!) {
+    updateSneaker(id: $id, input: $input) {
+      _id
+      brand
+      model
+      name
+      price
+      description
+      imageUrl
+      sizes {
+        size
+        quantity
+      }
+      gender
+      category
+      releaseDate
+      recommended
+      onSale
+      salePrice
+      autumn
+    }
+  }
+`;
 
+export const CREATE_SNEAKER = gql`
+  mutation createSneaker($input: SneakerInput!) {
+    createSneaker(input: $input) {
+      _id
+      brand
+      model
+      name
+      price
+      description
+      imageUrl
+      sizes {
+        size
+        quantity
+      }
+      gender
+      category
+      releaseDate
+      recommended
+      onSale
+      salePrice
+      autumn
+    }
+  }
+`;
+
+export const DELETE_SNEAKER = gql`
+  mutation deleteSneaker($id: ID!) {
+    deleteSneaker(id: $id) {
+      _id
+    }
+  }
+`;

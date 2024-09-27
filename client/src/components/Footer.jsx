@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="sneakerhub-footer__logo">
           <div className="sneakerhub-footer__shoe-container">
             <img
-              src="/public/assets/footerImage.png"
+              src="/assets/footerImage.png"
               alt="Sneaker Cutout"
               className="sneakerhub-footer__shoe-cutout"
             />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_USER_FAVORITES } from "../utils/queries";
 import SneakerCard from "../components/SneakerCard";
@@ -12,7 +12,13 @@ import {
 import "../styles/FavoritesPage.css";
 
 const FavoritesPage = () => {
-  const { loading, error, data, refetch } = useQuery(QUERY_USER_FAVORITES);
+  const { loading, error, data, refetch } = useQuery(QUERY_USER_FAVORITES, {
+    fetchPolicy: "network-only" // This ensures we always fetch from the server
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (loading) return <CircularProgress className="loading-spinner" />;
   if (error)
@@ -53,6 +59,7 @@ const FavoritesPage = () => {
                   sneaker={sneaker}
                   isFavorite={true}
                   refetchFavorites={refetch}
+                  cardClassName="favorite-sneaker-card"
                 />
               </Grid>
             ))}

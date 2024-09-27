@@ -56,3 +56,9 @@
   right: 8px;
   background-color: rgba(255, 255, 255, 0.8);
 }
+
+@media (max-width: 600px) {
+  .card-media {
+    height: 225px !important;
+  }
+}

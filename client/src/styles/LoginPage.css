@@ -137,20 +137,49 @@ input:focus {
 
 .demo-login {
   margin-top: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .demo-button {
-  background-color: #4CAF50;
-  color: white;
+  flex: 1;
+  padding: 10px 15px;
   border: none;
-  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 .demo-button:hover {
+  transform: translateY(-2px);
+}
+
+.demo-button:active {
+  transform: translateY(0);
+}
+
+.user-demo {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.user-demo:hover {
   background-color: #45a049;
+}
+
+.admin-demo {
+  background-color: #2196F3;
+  color: white;
+}
+
+.admin-demo:hover {
+  background-color: #1E88E5;
+}
+
+@media (max-width: 480px) {
+  .demo-login {
+    flex-direction: column;
+  }
 }

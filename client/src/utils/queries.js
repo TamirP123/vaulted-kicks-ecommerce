@@ -82,24 +82,26 @@ export const QUERY_LATEST_PICKS = gql`
 `;
 
 export const QUERY_ALL_SNEAKERS = gql`
-  query getAllSneakers {
+  query {
     allSneakers {
       _id
       brand
       model
       name
       price
+      description
       imageUrl
-      onSale
-      salePrice
-      gender
       sizes {
         size
         quantity
       }
-      description
+      gender
       category
       releaseDate
+      recommended
+      onSale
+      salePrice
+      autumn
     }
   }
 `;
@@ -199,3 +201,63 @@ export const QUERY_USER_FAVORITES = gql`
 `;
 
 // Remove the QUERY_CATEGORIES if it's no longer needed
+
+// Add these queries
+export const QUERY_SNEAKER_COUNT = gql`
+  query getSneakerCount {
+    sneakerCount
+  }
+`;
+
+export const QUERY_TOTAL_SALES = gql`
+  query getTotalSales {
+    totalSales
+  }
+`;
+
+// Add this query to the existing queries
+export const QUERY_ALL_ORDERS = gql`
+  query getAllOrders {
+    allOrders {
+      orders {
+        _id
+        orderDate
+        total
+        status
+        items {
+          sneaker {
+            name
+            imageUrl
+          }
+          size
+          quantity
+          price
+        }
+        shippingAddress {
+          fullName
+          address
+          city
+          state
+          zipCode
+        }
+      }
+      processingOrdersCount
+    }
+  }
+`;
+
+export const QUERY_ANALYTICS = gql`
+  query getAnalytics {
+    getAnalytics {
+      activeUsers
+      pageViews
+      averageSessionDuration
+      topProducts {
+        _id
+        name
+        brand
+        sales
+      }
+    }
+  }
+`;

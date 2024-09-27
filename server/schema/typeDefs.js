@@ -18,7 +18,7 @@ type Order {
 }
 
 type OrderItem {
-  sneaker: Sneaker!
+  sneaker: Sneaker
   size: Float!
   quantity: Int!
   price: Float!
@@ -95,6 +95,9 @@ type Query {
   orders: [Order]
   userOrders: [Order]
   sneakerCount: Int
+  totalSales: Float!
+  allOrders: OrdersResponse!
+  getAnalytics: Analytics!
 }
 
 type Auth {
@@ -106,6 +109,28 @@ type PaymentIntentResponse {
     clientSecret: String!
   }
 
+input SneakerInput {
+  brand: String!
+  model: String!
+  name: String!
+  gender: String!
+  sizes: [SizeQuantityInput]!
+  price: Float!
+  description: String
+  imageUrl: String
+  category: String
+  releaseDate: String
+  recommended: Boolean
+  onSale: Boolean
+  salePrice: Float
+  autumn: Boolean
+}
+
+input SizeQuantityInput {
+  size: Float!
+  quantity: Int!
+}
+
 type Mutation {
   addUser(username: String!, email: String!, password: String!): Auth
   login(email: String!, password: String!): Auth
@@ -113,7 +138,23 @@ type Mutation {
   addOrder(input: OrderInput!): Order
   addToFavorites(sneakerId: ID!): User
   removeFromFavorites(sneakerId: ID!): User
+  updateSneaker(id: ID!, input: SneakerInput!): Sneaker
+  createSneaker(input: SneakerInput!): Sneaker
+  deleteSneaker(id: ID!): Sneaker
 }
+
+type OrdersResponse {
+  orders: [Order]!
+  processingOrdersCount: Int!
+}
+
+type Analytics {
+  activeUsers: Int!
+  pageViews: Int!
+  averageSessionDuration: Float!
+  topProducts: [Sneaker]!
+}
+
 `;
 
 module.exports = typeDefs

@@ -47,6 +47,19 @@ function LoginPage() {
     }
   };
 
+  const handleDemoAdminLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const mutationResponse = await login({
+        variables: { email: "admin@example.com", password: "adminpassword123" },
+      });
+      const token = mutationResponse.data.login.token;
+      Auth.login(token);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div className="auth-page">
       <div className="auth-container">
@@ -97,8 +110,11 @@ function LoginPage() {
             </Link>
           </div>
           <div className="demo-login">
-            <button onClick={handleDemoLogin} className="demo-button">
+            <button onClick={handleDemoLogin} className="demo-button user-demo">
               Demo User Login
+            </button>
+            <button onClick={handleDemoAdminLogin} className="demo-button admin-demo">
+              Demo Admin Login
             </button>
           </div>
         </div>

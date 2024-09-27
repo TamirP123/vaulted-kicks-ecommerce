@@ -34,7 +34,7 @@ const SneakerDrop = () => {
         )}
       </div>
       <div className="sneaker-drop-image">
-        <img src="/public/assets/newsletterShoe.png" alt="Exclusive Sneaker Drop" />
+        <img src="/assets/newsletterShoe.png" alt="Exclusive Sneaker Drop" />
       </div>
     </section>
   );

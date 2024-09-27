@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import OrdersPage from "./pages/OrdersPage.jsx";
 import CheckoutConfirmation from "./pages/CheckoutConfirmation.jsx";
+import Auth from "./utils/auth.js";
 
 const stripePromise = loadStripe(
   "pk_test_51Pss2CC5VCV0wby5OZ2mDA4Y7UXCzQZxp50KhC6wxYYcovcPV76x1eABHWwHU2DBr8BeFNoV5dVbLfA8d7418Pl400ncMpKkjH"
@@ -19,6 +20,7 @@ import CheckoutPage from "./pages/CheckoutPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import FavoritesPage from "./pages/FavoritesPage.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Homepage />,
+        element: Auth.loggedIn() && Auth.getProfile().authenticatedPerson.isAdmin ? <AdminDashboard /> : <Homepage />,
       },
       {
         path: "sneakers",

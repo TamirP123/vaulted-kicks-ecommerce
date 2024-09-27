@@ -1,5 +1,5 @@
 const { User, Sneaker, Order } = require("../models");
-console.log('Sneaker model:', Sneaker); // Add this line
+console.log("Sneaker model:", Sneaker); // Add this line
 const { signToken, AuthenticationError } = require("../utils/auth");
 // Having issues with my API key via .env This is a free provided key from Stripe, typically would NOT put a secret key explicity like below.
 const stripe = require("stripe")(
@@ -16,7 +16,7 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('favorites');
+        return User.findOne({ _id: context.user._id }).populate("favorites");
       }
       throw new AuthenticationError("Not authenticated");
     },
@@ -73,13 +73,13 @@ const resolvers = {
     },
     allSneakers: async () => {
       try {
-        console.log('Attempting to fetch all sneakers');
+        console.log("Attempting to fetch all sneakers");
         const sneakers = await Sneaker.find();
-        console.log('Fetched sneakers:', sneakers);
+        console.log("Fetched sneakers:", sneakers);
         return sneakers;
       } catch (error) {
-        console.error('Error fetching all sneakers:', error);
-        throw new Error('Error fetching all sneakers: ' + error.message);
+        console.error("Error fetching all sneakers:", error);
+        throw new Error("Error fetching all sneakers: " + error.message);
       }
     },
     sneaker: async (_, { id }) => {
@@ -121,12 +121,40 @@ const resolvers = {
     sneakerCount: async () => {
       try {
         const count = await Sneaker.countDocuments();
-        console.log('Sneaker count:', count);
+        console.log("Sneaker count:", count);
         return count;
       } catch (error) {
-        console.error('Error counting sneakers:', error);
-        throw new Error('Error counting sneakers: ' + error.message);
+        console.error("Error counting sneakers:", error);
+        throw new Error("Error counting sneakers: " + error.message);
       }
+    },
+    totalSales: async () => {
+      const orders = await Order.find();
+      return orders.reduce((total, order) => total + order.total, 0);
+    },
+    allOrders: async (parent, args, context) => {
+      if (context.user && context.user.isAdmin) {
+        const orders = await Order.find().populate('items.sneaker').sort({ orderDate: -1 });
+        const processingOrdersCount = await Order.countDocuments({ status: 'Processing' });
+        return {
+          orders,
+          processingOrdersCount
+        };
+      }
+      throw new AuthenticationError("Not authorized to view all orders");
+    },
+    getAnalytics: async (parent, args, context) => {
+      if (context.user && context.user.isAdmin) {
+        // This is where you'd implement the logic to fetch real analytics data
+        // For now, we'll return mock data
+        return {
+          activeUsers: 120,
+          pageViews: 1500,
+          averageSessionDuration: 180.5,
+          topProducts: await Sneaker.find().sort('-sales').limit(5)
+        };
+      }
+      throw new AuthenticationError("Not authorized to view analytics");
     },
   },
 
@@ -218,15 +246,15 @@ const resolvers = {
             context.user._id,
             { $addToSet: { favorites: sneakerId } },
             { new: true }
-          ).populate('favorites');
-          console.log('Updated user favorites:', updatedUser.favorites);
+          ).populate("favorites");
+          console.log("Updated user favorites:", updatedUser.favorites);
           return updatedUser;
         } catch (error) {
           console.error("Error adding to favorites:", error);
           throw new Error("Failed to add to favorites");
         }
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
     removeFromFavorites: async (parent, { sneakerId }, context) => {
       if (context.user) {
@@ -235,14 +263,33 @@ const resolvers = {
             context.user._id,
             { $pull: { favorites: sneakerId } },
             { new: true }
-          ).populate('favorites');
+          ).populate("favorites");
           return updatedUser;
         } catch (error) {
           console.error("Error removing from favorites:", error);
           throw new Error("Failed to remove from favorites");
         }
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    updateSneaker: async (_, { id, input }, context) => {
+      if (context.user && context.user.isAdmin) {
+        return await Sneaker.findByIdAndUpdate(id, input, { new: true });
+      }
+      throw new AuthenticationError("Not authorized");
+    },
+    createSneaker: async (_, { input }, context) => {
+      if (context.user && context.user.isAdmin) {
+        return await Sneaker.create(input);
+      }
+      throw new AuthenticationError("Not authorized");
+    },
+    deleteSneaker: async (parent, { id }, context) => {
+      if (context.user && context.user.isAdmin) {
+        const deletedSneaker = await Sneaker.findByIdAndDelete(id);
+        return deletedSneaker;
+      }
+      throw new AuthenticationError("Not authorized to delete sneakers");
     },
   },
 };

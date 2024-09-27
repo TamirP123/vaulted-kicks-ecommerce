@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/BannerSection.css';
-import bannerVideo from '../../public/assets/banner.mp4';
+import bannerVideo from '/assets/banner.mp4';
 import { Link } from 'react-router-dom';
 
 const BannerSection = () => {

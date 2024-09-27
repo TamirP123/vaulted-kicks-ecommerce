@@ -7,6 +7,7 @@ import {
 } from "@apollo/client";
 import "./App.css";
 import { setContext } from "@apollo/client/link/context";
+import Auth from "./utils/auth";
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
@@ -30,9 +31,11 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const isAdmin = Auth.loggedIn() && Auth.getProfile().authenticatedPerson.isAdmin;
+
   return (
     <ApolloProvider client={client}>
-      <NavbarComponent />
+      {!isAdmin && <NavbarComponent />}
       <Outlet />
       {/* <Footer /> */}
     </ApolloProvider>
